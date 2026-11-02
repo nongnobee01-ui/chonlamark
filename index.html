@@ -1,0 +1,1299 @@
+<title>อินฟลูฯ ชลมารค ภาค ๑</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Sarabun:wght@400;500;600;700&display=swap">
+<style>
+/* required styles */
+
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-container,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	}
+.leaflet-container {
+	overflow: hidden;
+	}
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	        user-select: none;
+	  -webkit-user-drag: none;
+	}
+/* Prevents IE11 from highlighting tiles in blue */
+.leaflet-tile::selection {
+	background: transparent;
+}
+/* Safari renders non-retina tile on retina better with this, but Chrome is worse */
+.leaflet-safari .leaflet-tile {
+	image-rendering: -webkit-optimize-contrast;
+	}
+/* hack that prevents hw layers "stretching" when loading new tiles */
+.leaflet-safari .leaflet-tile-container {
+	width: 1600px;
+	height: 1600px;
+	-webkit-transform-origin: 0 0;
+	}
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	display: block;
+	}
+/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */
+/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */
+.leaflet-container .leaflet-overlay-pane svg {
+	max-width: none !important;
+	max-height: none !important;
+	}
+.leaflet-container .leaflet-marker-pane img,
+.leaflet-container .leaflet-shadow-pane img,
+.leaflet-container .leaflet-tile-pane img,
+.leaflet-container img.leaflet-image-layer,
+.leaflet-container .leaflet-tile {
+	max-width: none !important;
+	max-height: none !important;
+	width: auto;
+	padding: 0;
+	}
+
+.leaflet-container img.leaflet-tile {
+	/* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */
+	mix-blend-mode: plus-lighter;
+}
+
+.leaflet-container.leaflet-touch-zoom {
+	-ms-touch-action: pan-x pan-y;
+	touch-action: pan-x pan-y;
+	}
+.leaflet-container.leaflet-touch-drag {
+	-ms-touch-action: pinch-zoom;
+	/* Fallback for FF which doesn't support pinch-zoom */
+	touch-action: none;
+	touch-action: pinch-zoom;
+}
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+	-ms-touch-action: none;
+	touch-action: none;
+}
+.leaflet-container {
+	-webkit-tap-highlight-color: transparent;
+}
+.leaflet-container a {
+	-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);
+}
+.leaflet-tile {
+	filter: inherit;
+	visibility: hidden;
+	}
+.leaflet-tile-loaded {
+	visibility: inherit;
+	}
+.leaflet-zoom-box {
+	width: 0;
+	height: 0;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	z-index: 800;
+	}
+/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */
+.leaflet-overlay-pane svg {
+	-moz-user-select: none;
+	}
+
+.leaflet-pane         { z-index: 400; }
+
+.leaflet-tile-pane    { z-index: 200; }
+.leaflet-overlay-pane { z-index: 400; }
+.leaflet-shadow-pane  { z-index: 500; }
+.leaflet-marker-pane  { z-index: 600; }
+.leaflet-tooltip-pane   { z-index: 650; }
+.leaflet-popup-pane   { z-index: 700; }
+
+.leaflet-map-pane canvas { z-index: 100; }
+.leaflet-map-pane svg    { z-index: 200; }
+
+.leaflet-vml-shape {
+	width: 1px;
+	height: 1px;
+	}
+.lvml {
+	behavior: url(#default#VML);
+	display: inline-block;
+	position: absolute;
+	}
+
+
+/* control positioning */
+
+.leaflet-control {
+	position: relative;
+	z-index: 800;
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+.leaflet-top,
+.leaflet-bottom {
+	position: absolute;
+	z-index: 1000;
+	pointer-events: none;
+	}
+.leaflet-top {
+	top: 0;
+	}
+.leaflet-right {
+	right: 0;
+	}
+.leaflet-bottom {
+	bottom: 0;
+	}
+.leaflet-left {
+	left: 0;
+	}
+.leaflet-control {
+	float: left;
+	clear: both;
+	}
+.leaflet-right .leaflet-control {
+	float: right;
+	}
+.leaflet-top .leaflet-control {
+	margin-top: 10px;
+	}
+.leaflet-bottom .leaflet-control {
+	margin-bottom: 10px;
+	}
+.leaflet-left .leaflet-control {
+	margin-left: 10px;
+	}
+.leaflet-right .leaflet-control {
+	margin-right: 10px;
+	}
+
+
+/* zoom and fade animations */
+
+.leaflet-fade-anim .leaflet-popup {
+	opacity: 0;
+	-webkit-transition: opacity 0.2s linear;
+	   -moz-transition: opacity 0.2s linear;
+	        transition: opacity 0.2s linear;
+	}
+.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
+	opacity: 1;
+	}
+.leaflet-zoom-animated {
+	-webkit-transform-origin: 0 0;
+	    -ms-transform-origin: 0 0;
+	        transform-origin: 0 0;
+	}
+svg.leaflet-zoom-animated {
+	will-change: transform;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+	-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);
+	   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);
+	        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);
+	}
+.leaflet-zoom-anim .leaflet-tile,
+.leaflet-pan-anim .leaflet-tile {
+	-webkit-transition: none;
+	   -moz-transition: none;
+	        transition: none;
+	}
+
+.leaflet-zoom-anim .leaflet-zoom-hide {
+	visibility: hidden;
+	}
+
+
+/* cursors */
+
+.leaflet-interactive {
+	cursor: pointer;
+	}
+.leaflet-grab {
+	cursor: -webkit-grab;
+	cursor:    -moz-grab;
+	cursor:         grab;
+	}
+.leaflet-crosshair,
+.leaflet-crosshair .leaflet-interactive {
+	cursor: crosshair;
+	}
+.leaflet-popup-pane,
+.leaflet-control {
+	cursor: auto;
+	}
+.leaflet-dragging .leaflet-grab,
+.leaflet-dragging .leaflet-grab .leaflet-interactive,
+.leaflet-dragging .leaflet-marker-draggable {
+	cursor: move;
+	cursor: -webkit-grabbing;
+	cursor:    -moz-grabbing;
+	cursor:         grabbing;
+	}
+
+/* marker & overlays interactivity */
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-image-layer,
+.leaflet-pane > svg path,
+.leaflet-tile-container {
+	pointer-events: none;
+	}
+
+.leaflet-marker-icon.leaflet-interactive,
+.leaflet-image-layer.leaflet-interactive,
+.leaflet-pane > svg path.leaflet-interactive,
+svg.leaflet-image-layer.leaflet-interactive path {
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+
+/* visual tweaks */
+
+.leaflet-container {
+	background: #ddd;
+	outline-offset: 1px;
+	}
+.leaflet-container a {
+	color: #0078A8;
+	}
+.leaflet-zoom-box {
+	border: 2px dotted #38f;
+	background: rgba(255,255,255,0.5);
+	}
+
+
+/* general typography */
+.leaflet-container {
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-size: 0.75rem;
+	line-height: 1.5;
+	}
+
+
+/* general toolbar styles */
+
+.leaflet-bar {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+	border-radius: 4px;
+	}
+.leaflet-bar a {
+	background-color: #fff;
+	border-bottom: 1px solid #ccc;
+	width: 26px;
+	height: 26px;
+	line-height: 26px;
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+	}
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	}
+.leaflet-bar a:hover,
+.leaflet-bar a:focus {
+	background-color: #f4f4f4;
+	}
+.leaflet-bar a:first-child {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	}
+.leaflet-bar a:last-child {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom: none;
+	}
+.leaflet-bar a.leaflet-disabled {
+	cursor: default;
+	background-color: #f4f4f4;
+	color: #bbb;
+	}
+
+.leaflet-touch .leaflet-bar a {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	}
+.leaflet-touch .leaflet-bar a:first-child {
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	}
+.leaflet-touch .leaflet-bar a:last-child {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	}
+
+/* zoom control */
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+	font: bold 18px 'Lucida Console', Monaco, monospace;
+	text-indent: 1px;
+	}
+
+.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {
+	font-size: 22px;
+	}
+
+
+/* layers control */
+
+.leaflet-control-layers {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+	background: #fff;
+	border-radius: 5px;
+	}
+.leaflet-control-layers-toggle {
+	background-image: url(images/layers.png);
+	width: 36px;
+	height: 36px;
+	}
+.leaflet-retina .leaflet-control-layers-toggle {
+	background-image: url(images/layers-2x.png);
+	background-size: 26px 26px;
+	}
+.leaflet-touch .leaflet-control-layers-toggle {
+	width: 44px;
+	height: 44px;
+	}
+.leaflet-control-layers .leaflet-control-layers-list,
+.leaflet-control-layers-expanded .leaflet-control-layers-toggle {
+	display: none;
+	}
+.leaflet-control-layers-expanded .leaflet-control-layers-list {
+	display: block;
+	position: relative;
+	}
+.leaflet-control-layers-expanded {
+	padding: 6px 10px 6px 6px;
+	color: #333;
+	background: #fff;
+	}
+.leaflet-control-layers-scrollbar {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding-right: 5px;
+	}
+.leaflet-control-layers-selector {
+	margin-top: 2px;
+	position: relative;
+	top: 1px;
+	}
+.leaflet-control-layers label {
+	display: block;
+	font-size: 13px;
+	font-size: 1.08333em;
+	}
+.leaflet-control-layers-separator {
+	height: 0;
+	border-top: 1px solid #ddd;
+	margin: 5px -10px 5px -6px;
+	}
+
+/* Default icon URLs */
+.leaflet-default-icon-path { /* used only in path-guessing heuristic, see L.Icon.Default */
+	background-image: url(images/marker-icon.png);
+	}
+
+
+/* attribution and scale controls */
+
+.leaflet-container .leaflet-control-attribution {
+	background: #fff;
+	background: rgba(255, 255, 255, 0.8);
+	margin: 0;
+	}
+.leaflet-control-attribution,
+.leaflet-control-scale-line {
+	padding: 0 5px;
+	color: #333;
+	line-height: 1.4;
+	}
+.leaflet-control-attribution a {
+	text-decoration: none;
+	}
+.leaflet-control-attribution a:hover,
+.leaflet-control-attribution a:focus {
+	text-decoration: underline;
+	}
+.leaflet-attribution-flag {
+	display: inline !important;
+	vertical-align: baseline !important;
+	width: 1em;
+	height: 0.6669em;
+	}
+.leaflet-left .leaflet-control-scale {
+	margin-left: 5px;
+	}
+.leaflet-bottom .leaflet-control-scale {
+	margin-bottom: 5px;
+	}
+.leaflet-control-scale-line {
+	border: 2px solid #777;
+	border-top: none;
+	line-height: 1.1;
+	padding: 2px 5px 1px;
+	white-space: nowrap;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	background: rgba(255, 255, 255, 0.8);
+	text-shadow: 1px 1px #fff;
+	}
+.leaflet-control-scale-line:not(:first-child) {
+	border-top: 2px solid #777;
+	border-bottom: none;
+	margin-top: -2px;
+	}
+.leaflet-control-scale-line:not(:first-child):not(:last-child) {
+	border-bottom: 2px solid #777;
+	}
+
+.leaflet-touch .leaflet-control-attribution,
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	box-shadow: none;
+	}
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	border: 2px solid rgba(0,0,0,0.2);
+	background-clip: padding-box;
+	}
+
+
+/* popup */
+
+.leaflet-popup {
+	position: absolute;
+	text-align: center;
+	margin-bottom: 20px;
+	}
+.leaflet-popup-content-wrapper {
+	padding: 1px;
+	text-align: left;
+	border-radius: 12px;
+	}
+.leaflet-popup-content {
+	margin: 13px 24px 13px 20px;
+	line-height: 1.3;
+	font-size: 13px;
+	font-size: 1.08333em;
+	min-height: 1px;
+	}
+.leaflet-popup-content p {
+	margin: 17px 0;
+	margin: 1.3em 0;
+	}
+.leaflet-popup-tip-container {
+	width: 40px;
+	height: 20px;
+	position: absolute;
+	left: 50%;
+	margin-top: -1px;
+	margin-left: -20px;
+	overflow: hidden;
+	pointer-events: none;
+	}
+.leaflet-popup-tip {
+	width: 17px;
+	height: 17px;
+	padding: 1px;
+
+	margin: -10px auto 0;
+	pointer-events: auto;
+
+	-webkit-transform: rotate(45deg);
+	   -moz-transform: rotate(45deg);
+	    -ms-transform: rotate(45deg);
+	        transform: rotate(45deg);
+	}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+	background: white;
+	color: #333;
+	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+	}
+.leaflet-container a.leaflet-popup-close-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	text-align: center;
+	width: 24px;
+	height: 24px;
+	font: 16px/24px Tahoma, Verdana, sans-serif;
+	color: #757575;
+	text-decoration: none;
+	background: transparent;
+	}
+.leaflet-container a.leaflet-popup-close-button:hover,
+.leaflet-container a.leaflet-popup-close-button:focus {
+	color: #585858;
+	}
+.leaflet-popup-scrolled {
+	overflow: auto;
+	}
+
+.leaflet-oldie .leaflet-popup-content-wrapper {
+	-ms-zoom: 1;
+	}
+.leaflet-oldie .leaflet-popup-tip {
+	width: 24px;
+	margin: 0 auto;
+
+	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";
+	filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);
+	}
+
+.leaflet-oldie .leaflet-control-zoom,
+.leaflet-oldie .leaflet-control-layers,
+.leaflet-oldie .leaflet-popup-content-wrapper,
+.leaflet-oldie .leaflet-popup-tip {
+	border: 1px solid #999;
+	}
+
+
+/* div icon */
+
+.leaflet-div-icon {
+	background: #fff;
+	border: 1px solid #666;
+	}
+
+
+/* Tooltip */
+/* Base styles for the element that has a tooltip */
+.leaflet-tooltip {
+	position: absolute;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	color: #222;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	pointer-events: none;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+	}
+.leaflet-tooltip.leaflet-interactive {
+	cursor: pointer;
+	pointer-events: auto;
+	}
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	position: absolute;
+	pointer-events: none;
+	border: 6px solid transparent;
+	background: transparent;
+	content: "";
+	}
+
+/* Directions */
+
+.leaflet-tooltip-bottom {
+	margin-top: 6px;
+}
+.leaflet-tooltip-top {
+	margin-top: -6px;
+}
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-top:before {
+	left: 50%;
+	margin-left: -6px;
+	}
+.leaflet-tooltip-top:before {
+	bottom: 0;
+	margin-bottom: -12px;
+	border-top-color: #fff;
+	}
+.leaflet-tooltip-bottom:before {
+	top: 0;
+	margin-top: -12px;
+	margin-left: -6px;
+	border-bottom-color: #fff;
+	}
+.leaflet-tooltip-left {
+	margin-left: -6px;
+}
+.leaflet-tooltip-right {
+	margin-left: 6px;
+}
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	top: 50%;
+	margin-top: -6px;
+	}
+.leaflet-tooltip-left:before {
+	right: 0;
+	margin-right: -12px;
+	border-left-color: #fff;
+	}
+.leaflet-tooltip-right:before {
+	left: 0;
+	margin-left: -12px;
+	border-right-color: #fff;
+	}
+
+/* Printing */
+
+@media print {
+	/* Prevent printers from removing background-images of controls. */
+	.leaflet-control {
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+		}
+	}
+
+</style>
+<style>
+/* Layout: header with ทภ.1 crest, satellite map of the real procession route as the main view; schematic and full list as alternate tabs; detail in a sheet */
+:root{
+  --bg:#eef2f3; --surface:#ffffff; --fg:#13242b; --muted:#5a6e76; --line:#d2dcdf;
+  --river:#2a7593; --river-2:#4f9cb7; --bridge:#7d8b90; --gold:#a87b14; --gold-soft:#f3e7c6; --route:#f2c230;
+  --z1:#2a6fb0; --z2:#b0602a; --z3:#2f8a5c; --z4:#8a4bb0; --z5:#b03a5b; --z6:#8a6d12;
+  --display:"Chakra Petch","Sarabun",system-ui,sans-serif;
+  --body:"Sarabun",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b161a; --surface:#13232a; --fg:#e2edf0; --muted:#91a7af; --line:#24373e;
+  --river:#2c86a8; --river-2:#5fb2cd; --bridge:#8fa0a6; --gold:#e2b64e; --gold-soft:#3a3019;
+  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b161a; --surface:#13232a; --fg:#e2edf0; --muted:#91a7af; --line:#24373e;
+  --river:#2c86a8; --river-2:#5fb2cd; --bridge:#8fa0a6; --gold:#e2b64e; --gold-soft:#3a3019;
+  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding-block:18px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+header .crest{width:58px;height:auto;flex:none}
+header>div{min-width:0;display:grid;gap:2px}
+.eyebrow{font:600 12px var(--display);letter-spacing:.1em;color:var(--gold)}
+h1{font-family:var(--display);font-size:clamp(22px,4.6vw,32px);line-height:1.15;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px 26px;margin:4px 0 4px}
+.stat b{font:700 22px var(--display);font-variant-numeric:tabular-nums;display:block;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted)}
+
+.tabs{display:flex;gap:2px;margin:14px 0 12px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{font:600 15px var(--display);background:none;border:0;color:var(--muted);padding:8px 12px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--fg);border-color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+.zones{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.zbtn{font:600 13px var(--display);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:99px;padding:4px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.zbtn[aria-pressed="true"]{border-color:var(--fg);background:var(--fg);color:var(--bg)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--zc);flex:none}
+
+/* Satellite map */
+.mapbox{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+#sat{height:min(72vh,720px);min-height:420px;background:#cfdcd6}
+.maptools{position:absolute;z-index:500;top:10px;right:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.mbtn{font:600 13px var(--display);background:rgb(255 255 255 / .94);color:#13242b;border:1px solid #c9d3d6;border-radius:8px;padding:5px 10px;cursor:pointer;box-shadow:0 1px 4px rgb(0 0 0 / .2)}
+.mbtn[aria-pressed="true"]{background:#13242b;color:#fff;border-color:#13242b}
+.notice{position:absolute;z-index:500;left:10px;right:10px;bottom:10px;background:rgb(19 36 43 / .9);color:#fff;font-size:13px;border-radius:10px;padding:8px 12px}
+.mk{position:relative;width:48px;height:48px}
+.mk img{width:48px;height:48px;border-radius:50%;object-fit:cover;border:3px solid var(--zc);background:#ddd;box-shadow:0 2px 6px rgb(0 0 0 / .45)}
+.mk .n{position:absolute;right:-6px;top:-6px;min-width:22px;height:22px;border-radius:11px;background:var(--zc);color:#fff;font:700 12px/22px var(--display);text-align:center;padding:0 5px;border:2px solid #fff}
+.mk.dim{opacity:.3}
+.leaflet-tooltip.lbl{background:rgb(19 36 43 / .88);color:#fff;border:0;border-radius:6px;font:600 12px var(--display);padding:2px 7px;box-shadow:none}
+.leaflet-tooltip.lbl::before{display:none}
+.leaflet-tooltip.endpt{background:var(--route);color:#13242b;border:0;font:700 12px var(--display);border-radius:6px;padding:2px 8px}
+.leaflet-tooltip.endpt::before{display:none}
+.leaflet-container{font-family:var(--body)}
+.edit-panel{margin-top:10px;display:grid;gap:6px}
+.edit-panel textarea{width:100%;min-height:120px;font:12px ui-monospace,monospace;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);padding:8px}
+.unplaced{margin-top:16px}
+.unplaced h3{font:600 15px var(--display);margin:0 0 8px}
+
+/* Schematic */
+.banks{display:grid;grid-template-columns:1fr 40px 1fr;column-gap:10px;font:600 12px var(--display);color:var(--muted);letter-spacing:.06em;margin-bottom:6px}
+.banks span:first-child{text-align:right}
+.banks .n{text-align:center;color:var(--river)}
+.map{position:relative;display:grid;grid-template-columns:1fr 40px 1fr;gap:12px 10px;padding-block:10px}
+.map::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:40px;transform:translateX(-50%);border-radius:20px;
+  background:repeating-linear-gradient(172deg,var(--river) 0 16px,var(--river-2) 16px 19px)}
+.rlabel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(90deg);font:600 12px var(--display);color:#fff;letter-spacing:.3em;white-space:nowrap;pointer-events:none;opacity:.85}
+.bridge{grid-column:1/-1;position:relative;height:22px;display:flex;align-items:center;justify-content:center}
+.bridge::before{content:"";position:absolute;left:8%;right:8%;top:50%;height:6px;transform:translateY(-50%);background:var(--bridge);border-radius:3px;opacity:.55}
+.bridge span{position:relative;font:600 12px var(--display);background:var(--bg);color:var(--fg);padding:1px 10px;border-radius:99px;border:1px solid var(--line)}
+.cell{min-width:0;position:relative}
+.cell.w{grid-column:1}.cell.e{grid-column:3}
+.cell::after{content:"";position:absolute;top:22px;width:10px;height:2px;background:var(--zc)}
+.cell.w::after{right:-10px}.cell.e::after{left:-10px}
+.pt{width:100%;display:grid;gap:6px;text-align:left;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--zc);border-radius:10px;padding:9px 10px;cursor:pointer;color:inherit;font:inherit;transition:opacity .15s}
+.cell.w .pt{border-left:1px solid var(--line);border-right:4px solid var(--zc);text-align:right}
+.pt:hover{border-color:var(--zc)}
+.pt.dim{opacity:.28}
+.pt-zone{font:600 11px var(--display);color:var(--zc);letter-spacing:.05em}
+.pt-name{font:600 15px/1.3 var(--display);margin:0}
+.stack{display:flex;align-items:center;gap:6px}
+.cell.w .stack{flex-direction:row-reverse}
+.faces{display:flex}
+.cell.w .faces{flex-direction:row-reverse}
+.faces img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--surface);margin-left:-9px;background:var(--line)}
+.faces img:first-child{margin-left:0}
+.cell.w .faces img{margin-left:0;margin-right:-9px}.cell.w .faces img:first-child{margin-right:0}
+.cnt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.legend{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+
+/* People list */
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.tools input,.tools select{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);min-width:0;flex:1 1 150px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.pc{display:flex;gap:12px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;color:inherit;font:inherit}
+.pc:hover{border-color:var(--gold)}
+.pc img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none;border:3px solid var(--zc);background:var(--line)}
+.pc div{min-width:0}
+.pc b{font:600 15px/1.3 var(--display);display:block}
+.pc small{color:var(--muted);display:block;font-size:13px;line-height:1.4}
+.tag{display:inline-block;font-size:11px;border-radius:4px;padding:0 6px;background:var(--gold-soft);color:var(--fg);margin-right:4px}
+.count-line{font-size:13px;color:var(--muted);margin:0 0 8px}
+
+/* Sheet */
+dialog{border:0;padding:0;background:var(--surface);color:var(--fg);border-radius:16px;width:min(600px,calc(100% - 24px));max-height:88vh;overflow:auto}
+dialog::backdrop{background:rgb(5 15 20 / .55)}
+.sheet{padding:18px 18px 22px;display:grid;gap:14px}
+.head{display:flex;gap:14px;align-items:center}
+.head>div{min-width:0}
+.head h2{font-family:var(--display);font-size:21px;margin:0;line-height:1.25;text-wrap:balance}
+.head .big{width:104px;height:104px;border-radius:50%;object-fit:cover;flex:none;border:4px solid var(--zc);background:var(--line)}
+.close{margin-left:auto;align-self:flex-start;background:var(--bg);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:4px 12px;cursor:pointer;font:inherit}
+.back{background:none;border:0;color:var(--river);font:600 14px var(--body);cursor:pointer;padding:0;justify-self:start;text-align:left}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:7px 14px;margin:0}
+.kv dt{color:var(--muted);font-size:13px;padding-top:2px}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.coord{background:var(--gold-soft);border-radius:12px;padding:12px}
+.tel{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tel b{font-variant-numeric:tabular-nums;user-select:all}
+.cp{font:600 12px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:1px 8px;cursor:pointer}
+.bio{margin:0;background:var(--bg);border-radius:10px;padding:10px 12px}
+.links{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.links a,.kv a{color:var(--river);font-weight:600;text-decoration:none;overflow-wrap:anywhere}
+.links a{display:flex;gap:8px;align-items:baseline}
+.links a:hover,.kv a:hover{text-decoration:underline}
+.links .plat{font:600 11px var(--display);color:var(--muted);min-width:68px;letter-spacing:.04em}
+.sec{font:600 12px var(--display);letter-spacing:.08em;color:var(--muted);margin:0}
+.muted{color:var(--muted)}
+.grp{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:6px}
+.grp b{font-family:var(--display)}
+@media (prefers-reduced-motion:no-preference){dialog[open]{animation:up .18s ease-out}@keyframes up{from{transform:translateY(14px);opacity:.6}}}
+@media (max-width:480px){.pt-name{font-size:14px}.faces img{width:26px;height:26px}.map,.banks{column-gap:6px;grid-template-columns:1fr 30px 1fr}.map::before{width:30px}header .crest{width:46px}.mk,.mk img{width:40px;height:40px}}
+</style>
+
+<div class="wrap">
+  <header>
+    <img class="crest" src="logo.png" alt="ตรากองทัพภาคที่ 1">
+    <div>
+      <div class="eyebrow">กองทัพภาคที่ 1 · ศอ.จอส.พระราชทาน ภาค ๑</div>
+      <h1>อินฟลูเอนเซอร์ตามเส้นทางชลมารค</h1>
+      <p class="sub">ขบวนพยุหยาตราทางชลมารค ท่าวาสุกรี ถึง วัดอรุณราชวราราม</p>
+    </div>
+  </header>
+  <div class="stats" id="stats"></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-sat" aria-selected="true">แผนที่ดาวเทียม</button>
+    <button class="tab" role="tab" id="tab-map" aria-selected="false">ผังริมน้ำ</button>
+    <button class="tab" role="tab" id="tab-list" aria-selected="false">รายชื่อทั้งหมด</button>
+  </div>
+
+  <div class="zones" id="zones"></div>
+
+  <section id="view-sat">
+    <div class="mapbox">
+      <div id="sat"></div>
+      <div class="maptools">
+        <button class="mbtn" id="b-labels" aria-pressed="true">ชื่อสถานที่</button>
+        <button class="mbtn" id="b-fit">ดูทั้งเส้นทาง</button>
+        <button class="mbtn" id="b-edit" aria-pressed="false">ปรับตำแหน่งจุด</button>
+      </div>
+      <div class="notice" id="notice" hidden></div>
+    </div>
+    <div class="edit-panel" id="edit-panel" hidden>
+      <p class="sub">ลากรูปบนแผนที่ไปวางให้ตรงจุดจริง แล้วคัดลอกพิกัดด้านล่างไปแทนค่าใน POINTS ของไฟล์</p>
+      <textarea id="coords" readonly></textarea>
+      <div><button class="cp" id="b-copycoords">คัดลอกพิกัด</button></div>
+    </div>
+    <div class="unplaced" id="unplaced"></div>
+  </section>
+
+  <section id="view-map" hidden>
+    <div class="banks"><span>ฝั่งธนบุรี</span><span class="n">เหนือ ↑</span><span>ฝั่งพระนคร</span></div>
+    <div class="map" id="map"></div>
+    <p class="legend">เรียงจุดจากเหนือลงใต้ตามตำแหน่งริมแม่น้ำ</p>
+  </section>
+
+  <section id="view-list" hidden>
+    <div class="tools">
+      <input id="q" type="search" placeholder="ค้นหาชื่อ เพจ สังกัด หรือผู้ประสานงาน">
+      <select id="ftype"><option value="">ทหาร/ตำรวจ และพลเรือน</option><option value="mil">ทหาร/ตำรวจ</option><option value="civ">พลเรือน</option></select>
+      <select id="fsort"><option value="zone">เรียงตามกลุ่ม</option><option value="fol">ผู้ติดตามมากสุด</option></select>
+    </div>
+    <p class="count-line" id="count"></p>
+    <div class="grid" id="grid"></div>
+  </section>
+</div>
+
+<dialog id="sheet"><div class="sheet" id="sb"></div></dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+/* ===================== ข้อมูล =====================
+   แหล่งข้อมูล
+   - กลุ่มโซน 1–5: เอกสาร "ข้อมูล Influencer ศอ.จอส.พระราชทาน ภาค ๑" (PDF)
+   - กลุ่ม ทภ.1 (zone 6): ตาราง "ข้อมูล Influencer หน่วยทหาร / พลเรือน" และ "นักเรียน/นักศึกษา เข้าร่วมรับเสด็จฯ"
+   POINTS: lat/lng ตรวจกับภาพดาวเทียม Esri แล้ว (ปรับได้ด้วยปุ่ม "ปรับตำแหน่งจุด")
+   bank "w" = ฝั่งธนบุรี, "e" = ฝั่งพระนคร · bridge/pair ใช้กับผังริมน้ำ */
+const ZONE_LABEL = {1:"โซน 1",2:"โซน 2",3:"โซน 3",4:"โซน 4",5:"โซน 5",6:"กลุ่ม ทภ.1"};
+const POINTS = [
+  {id:"L1",  zone:1, bank:"e", name:"วัดราชาธิวาส", lat:13.7763, lng:100.5024},
+  {id:"L2",  zone:1, bank:"e", name:"วัดเทวราชกุญชร", lat:13.7722, lng:100.5008},
+  {id:"L3",  zone:1, bank:"e", name:"ใต้สะพานพระราม 8 (ศูนย์การเรียนรู้ ธปท.)", lat:13.7695, lng:100.499, bridge:"สะพานพระราม 8"},
+  {id:"L4",  zone:3, bank:"w", name:"ใต้สะพานพระราม 8 ฝั่งธนบุรี", lat:13.7688, lng:100.4952, pair:true},
+  {id:"L5",  zone:1, bank:"e", name:"สวนสันติชัยปราการ", lat:13.7641, lng:100.4955},
+  {id:"L6",  zone:1, bank:"e", name:"พุทธสมาคม", lat:13.7626, lng:100.493},
+  {id:"L7",  zone:3, bank:"w", name:"ใต้สะพานสมเด็จพระปิ่นเกล้า", lat:13.7625, lng:100.49, bridge:"สะพานสมเด็จพระปิ่นเกล้า"},
+  {id:"L8",  zone:2, bank:"e", name:"ม.ธรรมศาสตร์ ท่าพระจันทร์", lat:13.757, lng:100.49},
+  {id:"L9",  zone:4, bank:"w", name:"สวนสุขภาพ รพ.ศิริราช / อุทยานรสถานพิมุข", lat:13.7598, lng:100.4877, pair:true},
+  {id:"L10", zone:4, bank:"w", name:"วัดระฆังฯ", lat:13.7526, lng:100.4866},
+  {id:"L13", zone:6, bank:"e", name:"ท่าช้าง (พื้นที่รับเสด็จ)", lat:13.7524, lng:100.4889, pair:true},
+  {id:"L11", zone:2, bank:"e", name:"สวนนคราภิรมย์", lat:13.7498, lng:100.489},
+  {id:"L12", zone:5, bank:"w", name:"วัดอรุณฯ", lat:13.7434, lng:100.49}
+];
+
+/* เส้นแม่น้ำ (กลางลำน้ำ) เหนือ→ใต้ และเส้นทางขบวน = ช่วงตั้งแต่ ROUTE_START */
+const RIVER = [[13.7795,100.5010],[13.7770,100.5001],[13.7741,100.4990],[13.7718,100.4981],[13.7700,100.4972],[13.7689,100.4966],
+  [13.7657,100.4952],[13.7638,100.4940],[13.7619,100.4909],[13.7594,100.4886],[13.7562,100.4879],[13.7525,100.4877],
+  [13.7488,100.4883],[13.7457,100.4896],[13.7437,100.4914],[13.7416,100.4929]];
+const ROUTE_START = {name:"ท่าวาสุกรี (จุดเริ่ม)", at:[13.7735,100.4998]};
+const ROUTE_END   = {name:"วัดอรุณฯ (จุดสิ้นสุด)", at:[13.7437,100.4914]};
+
+/* ผู้ประสานงาน: {name, tel} · pickup/area/car ใช้กับกลุ่ม ทภ.1 */
+const T = (name, tel) => ({name, tel});
+const C_JEERA = T("ร.ต.จีระฐี จิตรหาญ","06 1650 4906");
+const C_PRIM  = T("น.ส.พริ้มเพรา พูลสวัสดิ์","08 9757 5456");
+const C_SET   = T("พ.ต.เศรษฐกิจ ต้นสกุล","09 7139 5693");
+
+const PEOPLE = [
+  // ---------- โซน 1 ----------
+  {zone:1,type:"mil",name:"ส.ต.ท. จักรกริช อิ่มรัง",unit:"สตช.",pages:["จักการิช","jakkanott"],fol:117900,pt:"L2",photo:"p01",
+   bio:"ช่องหลักเป็นไลฟ์สไตล์ชีวิตตำรวจชั้นประทวน คลิปเตือนภัย และสัมภาษณ์ผู้ปกครองของตำรวจ เล่าเรื่องแบบสตอรี่บอร์ดให้เข้าใจง่าย อีกช่องถ่ายทอดเรื่องสถาบันพระมหากษัตริย์ผ่านวันสำคัญ การเข้ารับเสด็จ และสัมภาษณ์ความรู้สึกประชาชนที่มารับเสด็จ",
+   links:["https://www.tiktok.com/@jakkrit_nott","https://www.tiktok.com/@jakkanott","https://www.instagram.com/jakkrit_not"]},
+  {zone:1,type:"civ",name:"นางสาว รสวรรณภัทชก์ หงษ์สุวรรณ์",pages:["Tai Rossawanaphat Hongsuwan","Around Thailand News","thethaipress.com"],fol:340500,pt:"L5",photo:"p02",
+   bio:"นักเขียนสารคดี นักข่าวและช่างภาพสายท่องเที่ยวและวัฒนธรรมระดับมือรางวัล ประสบการณ์งานข่าวกว่า 20 ปี ผลิตสื่อประชาสัมพันธ์ ไกด์บุ๊ค e-book photo book และนิทรรศการภาพถ่าย",
+   links:["https://www.thethaipress.com"]},
+  {zone:1,type:"civ",name:"นางสาว ศนิสา ฉายาช่าง",pages:["เบิร์ดคิดบวก @nokeebird8","richrich_9988","ซานิ บ้านเบิร์ด @birdnok1489"],fol:20000,pt:"L6",photo:"p03",
+   bio:"จิตอาสา ประธานชุมชนกองทุนแม่ของแผ่นดิน วิทยากรครูประวัติศาสตร์ ครีเอเตอร์ TikTok 3 ช่อง ประธานชมรมคุ้มครองผู้บริโภค ครูและผู้บริหารสถานศึกษา ดูแลโครงการชมรมผู้สูงอายุให้รู้ทันสื่อออนไลน์",
+   links:["https://www.tiktok.com/@nokeebird8","https://www.tiktok.com/@richrich_9988","https://www.tiktok.com/@birdnok1489"]},
+  {zone:1,type:"civ",name:"นาย สนอง วงษ์เดอรี",pages:["สนอง วงษ์เดอรี","snong097"],fol:9000,pt:"L5",photo:"p04",
+   bio:"งานประชาสัมพันธ์",links:["https://www.facebook.com/snxng.wngs.de.xri","https://www.tiktok.com/@sanong054325"]},
+  {zone:1,type:"civ",name:"นาย กิติคุณ ปัญญาประชุม",pages:["kiti_kunn","สิรินันทกาล","kitikun.ig"],fol:5391,pt:"L1",photo:"p05",
+   bio:"พูดได้ดี ทำอินโฟกราฟิก ตัดต่อ และมีมนุษยสัมพันธ์ดี",
+   links:["https://www.tiktok.com/@kiti_kunn","https://www.tiktok.com/@siri.nanthakarn","https://www.instagram.com/kitikun.ig"]},
+  {zone:1,type:"civ",name:"นาง ลักขณา ทองมะลิ",pages:["ลักขณา ทองมะลิ"],fol:3200,pt:"L2",photo:"p06",
+   bio:"ดับเพลิง",links:["https://www.facebook.com/lakkhna.thxng.mali"]},
+  {zone:1,type:"civ",name:"นางสาว พรณิชา เผ่าพันธ์",pages:["พรณิชา"],fol:2100,pt:"L3",photo:"p07",
+   bio:"ทำคอนเทนต์เทิดพระเกียรติราชวงศ์ไทย สืบสานพระราชประวัติ น้อมรำลึกในพระมหากรุณาธิคุณ",links:["https://www.tiktok.com/@pornnicha_4265"]},
+  {zone:1,type:"civ",name:"นางสาว ธันยรัศมิ์ งามณรงค์ชัย",pages:["หนิง","Thanyarat Ngarmnarongchai"],fol:1400,pt:"L6",photo:"p08",
+   bio:"ชอบงานจิตอาสา",links:["https://www.tiktok.com/@ningthanyarat1","https://www.facebook.com/share/19dbkqasYb/"]},
+  {zone:1,type:"civ",name:"นาง พรนภา บุรณศิริ",pages:["พรนภา"],fol:766,pt:"L1",photo:"p09",
+   bio:"สื่อจิตอาสาแพทย์วิถีธรรม (หมอเขียว)",links:["https://www.facebook.com/phr.npha.bu.rn.siri"]},
+  {zone:1,type:"civ",name:"นาย พิริยะ ทองจิตติ",pages:["โครงการส่งเสริมและพัฒนาศักยภาพบุคลากรแห่งประเทศไทย"],fol:177,pt:"L2",photo:"p10",
+   bio:"มีทักษะ script writer สื่อสารภาษาอังกฤษได้ดี ถ่ายภาพนิ่งและภาพเคลื่อนไหว ชื่นชอบและมีความรู้ด้านประวัติศาสตร์",links:["https://www.facebook.com/share/1YcBLK8m5o/"]},
+  {zone:1,type:"civ",name:"นาย ธนวัช เผ่าพันธ์",pages:["@pop_around"],fol:7,pt:"L3",photo:"p11",
+   bio:"ชอบเรียนรู้ประสบการณ์ใหม่ๆ",links:["https://www.tiktok.com/@pop_around"]},
+  // ---------- โซน 2 ----------
+  {zone:2,type:"mil",name:"ร.อ.หญิง พุทธชาด มาตร์มงคล",unit:"โรงเรียนเสนารักษ์ กรมแพทย์ทหารบก",pages:["โครงการส่งเสริมและพัฒนาศักยภาพบุคลากรแห่งประเทศไทย"],fol:176,pt:"L8",photo:"p12",
+   bio:"มีความรู้ด้านการถ่ายภาพนิ่งและวิดีโอ และงาน script writer",links:["https://www.facebook.com/share/1LxTRV62bM/"]},
+  {zone:2,type:"civ",name:"นางสาว สุธิกาญจน์ ตันติยาพงศ์",pages:["@panglamsam_fc"],fol:214697,pt:"L11",photo:"p13",
+   bio:"แอดมินและครีเอเตอร์ช่องแฟนคลับคุณแป้ง (นวลพรรณ ล่ำซำ) เคยเป็นช่างภาพให้ช่อง 3 และทีมมูลนิธิมาดามแป้ง ตั้งใจนำเสนองานพระราชพิธีและบันทึกประวัติศาสตร์ในมุมของประชาชนจิตอาสา",
+   links:["https://www.tiktok.com/@panglamsam_fc","https://instagram.com/panglamsam_fc"]},
+  {zone:2,type:"civ",name:"นาย สมพร ปู่อ้าย",pages:["@tfreedom95","Somporn Poo-ai","เทคโนโลยีติดดิน"],fol:17894,pt:"L8",photo:"p14",
+   bio:"คลิปชีวิตประจำวันตามสถานที่จริง ความรู้แนวศาสตร์พระราชา เศรษฐกิจพอเพียง ธนาคารน้ำใต้ดิน โซลาร์เซลล์ ตะบันน้ำ ลงพื้นที่พบชาวบ้าน",
+   links:["https://www.tiktok.com/@tfreedom95","https://www.facebook.com/share/1M1aDsxjNZ/","https://youtube.com/@energyforself-sufficiency"]},
+  {zone:2,type:"civ",name:"นางสาว นวรัตน์ มาถาวร (บุรณศิริ)",pages:["TIGER9025","PLE Kiddee Mnv"],fol:4107,pt:"L8",photo:"p15",
+   bio:"ชอบเรียนรู้และลงมือทำ ตั้งใจเป็นอินฟลูภาคประชาชนเพื่อสถาบัน พร้อมทั้งกาย ใจ และอุปกรณ์ ทำด้วยจิตอาสา",
+   links:["https://www.tiktok.com/@thailandlovely","https://www.facebook.com/share/1MrNy3crmd/"]},
+  {zone:2,type:"civ",name:"ผกก.ต (ญ) หทัยทิพย์ อู่อรุณ",pages:["Aujang Auarun"],fol:2800,pt:"L11",photo:"p16",
+   bio:"ผู้กำกับกำลังสำรอง สมาคมกำลังสำรองรักษาดินแดนไทย จิตอาสา เลขาโครงการสี่เสาหลัก นักร้องเพลงเพื่อชาติ ประธานอนุฯ ฝ่ายสื่อสารองค์กร มูลนิธิครอบครัวพอเพียง",
+   links:["https://www.tiktok.com/@aujang.auarun","https://www.facebook.com/share/1BrYKJnXzz/","https://www.instagram.com/aujang_31"]},
+  {zone:2,type:"civ",name:"นาย สุรศักดิ์ ตวยกระโทก",pages:["พี่ บี"],fol:2782,pt:"L8",photo:"p17",
+   bio:"ถ่ายทอดเรื่องราวผ่านวิดีโอและภาพประกอบ สื่อถึงความจงรักภักดีต่อสถาบันพระมหากษัตริย์และราชวงศ์จักรี",links:["https://vt.tiktok.com/ZSgg5yvP8/"]},
+  {zone:2,type:"civ",name:"นาง อัยลดา ชุมพล",pages:["Ya v","airada","จิตอาสาเสือป่า"],fol:1271,pt:"L11",photo:"p18",bio:"พูดภาษาอังกฤษได้",links:[]},
+  {zone:2,type:"civ",name:"นางสาว ชนิตา เปรมปรี",pages:["K.Ta@k.ta326"],fol:1023,pt:"L11",photo:"p19",
+   bio:"นำเสนอสถานที่ท่องเที่ยว วัด อาหาร และกิจกรรมต่างๆ",links:["http://tiktok.com/@k.ta326"]},
+  {zone:2,type:"civ",name:"นาย เสรี อุไรพงษ์",pages:["seree uraipong"],fol:99,folNote:"ล็อกโปรไฟล์",pt:"L11",photo:"p20",
+   bio:"ประชาสัมพันธ์",links:["https://www.facebook.com/popmuay"]},
+  // ---------- โซน 3 ----------
+  {zone:3,type:"mil",name:"ร.ต.หญิง พีรดา ยอดใจ ร.น.",unit:"บก.ทท.",pages:["Peerada Yodjai"],fol:136667,pt:"L4",photo:"p21",
+   bio:"ถ่ายทำบรรยากาศงานพิธีพยุหยาตราทางชลมารค ปี 69",links:["https://www.tiktok.com/@d.peeradaaa","https://www.facebook.com/share/14wvCiFf747/"]},
+  {zone:3,type:"mil",name:"จ.อ.อ. ทศพล พันธุ์รัตน์",unit:"บก.ทท.",pages:["จ่าสต๊อป","Todsapon Tob Panrat"],fol:55200,pt:"L4",photo:"p22",
+   bio:"เผยแพร่ข่าวสารการปฏิบัติหน้าที่ของกองทัพไทยและเหล่าทัพ และความสง่างามของราชประเพณี",links:["https://www.tiktok.com/@todsaponpanrat","https://www.facebook.com/share/1E8FtdCaHq/"]},
+  {zone:3,type:"mil",name:"ร.ต.หญิง รัตนาภรณ์ กุนอก",unit:"บก.ทท.",pages:["Rattanaporn Kunok"],fol:null,pt:"L4",photo:"p23",
+   bio:"เผยแพร่ข่าวสารการปฏิบัติหน้าที่ของกองทัพไทยและเหล่าทัพ เอกลักษณ์วัฒนธรรมไทย และความสง่างามของราชประเพณี",links:["https://www.facebook.com/share/r/19jnzB9zmj/","https://vt.tiktok.com/ZSgcDxw6U/"]},
+  {zone:3,type:"civ",name:"นางสาว ปราณี เนตรรัตนะ",pages:["Pranee Nertrattana","แจ้แฟนคลับ","Dkd Dkd Nertrattana"],fol:111000,pt:"L7",photo:"p24",
+   bio:"ชอบถ่ายรูปวิวธรรมชาติ ต้นไม้ ดอกไม้ สัตว์เลี้ยง และคอนเสิร์ตต่างๆ",links:["https://www.facebook.com/pranee.nertrattana","https://www.facebook.com/e21dkd/","https://www.facebook.com/DkdDkd.Nertrattana"]},
+  {zone:3,type:"civ",name:"นางสาว วรรณภัทร ยิ่งยศวงษ์สกุล",pages:["Wannapath Yingyoswongsakul"],fol:121,pt:"L7",photo:"p25",
+   bio:"งานด้านประชาสัมพันธ์",links:["https://www.facebook.com/wannapath.yingyoswongsakul"]},
+  {zone:3,type:"civ",name:"นางสาว ขวัญใจ ภัทรสถาพร",pages:["ลมหายใจของความทรงจำ","lastlomhaijai"],fol:2632,pt:"L4",photo:"p26",
+   bio:"ไกด์สายวัฒนธรรม Guide, Blogger และ Influencer บน FB/IG/YouTube/TikTok/Lemon8 เคยเป็น Influencer รายการชุมชนแชมเปี้ยน ช่อง 5 HD",
+   links:["https://www.facebook.com/lastlomhaijai","https://www.instagram.com/lastlomhaijai","https://www.tiktok.com/@lastlomhaijai","https://youtube.com/@lastlomhaijai","https://www.lemon8-app.com/@lastlomhaijai"]},
+  {zone:3,type:"civ",name:"ผกก.ท. เกษร วสิฎฐิตานนท์",pages:["Kasorn Wasithitanind"],fol:1200,pt:"L4",photo:"p27",
+   bio:"ร้องเพลง และจิตอาสาประสานงานให้กับหน่วยงานราชการ",links:["https://www.facebook.com/share/19eExN37SZ/"]},
+  // ---------- โซน 4 ----------
+  {zone:4,type:"mil",name:"น.ส. ปุญญิสา ภานกุล",unit:"กองยุทธการเรือ",pages:["ญิสา.sea"],fol:112000,pt:"L9",photo:"p28",
+   bio:"เล่าเรื่องราวประวัติและการทำงานเกี่ยวกับกองเรือยุทธการ",links:["https://www.tiktok.com/@yisa.pnk"]},
+  {zone:4,type:"civ",name:"นาย วรเชษฐ์ ดวงมาเกิด",pages:["ละออ โปรดักชั่น","Laallproduction","modnongmax"],fol:34716,pt:"L9",photo:"p29",
+   bio:"ผู้สร้างสรรค์สื่อสารคดีในนาม ละออ โปรดักชั่น ผลิตสารคดี ภาพถ่าย วิดีโอ และสัมภาษณ์ ครอบคลุมธรรมะ การท่องเที่ยว วัฒนธรรม และประเพณีท้องถิ่น",
+   links:["https://www.tiktok.com/@laallproduction","https://www.facebook.com/laallproduction/","https://www.instagram.com/modnongmax/"]},
+  {zone:4,type:"civ",name:"ว่าที่ร้อยเอก สิริภคชัยวัฑฒ์ ชัยสงค์",pages:["คนกันเอง TEAM_SPIRIT","ชมรมจิตอาสาพิทักษ์ราชบัลลังก์ (จพร.)"],fol:2000,pt:"L10",photo:"p30",
+   bio:"รวมทีมจิตอาสาเพื่องานการกุศลและสาธารณประโยชน์ เช่น ล้างป่าช้า ออกโรงทาน และส่งเสริมกิจกรรมเกี่ยวกับสถาบันพระมหากษัตริย์",
+   links:["https://www.facebook.com/share/g/1MQnzaAg7v/","https://www.facebook.com/share/1FNtUDjd2G/"]},
+  {zone:4,type:"civ",name:"นาย กร บุญมาเลิศ",pages:["@kornb09"],fol:449,pt:"L10",photo:"p31",bio:"เคยเป็นผู้สื่อข่าว",links:["https://www.tiktok.com/@kornb09"]},
+  {zone:4,type:"civ",name:"นางสาว ศิริกูล ปิ่นวิเศษ",pages:[],fol:null,pt:"L9",photo:"p32",bio:"",links:[]},
+  {zone:4,type:"civ",name:"นาย ประเสริฐ หลักชัย",pages:["เกร็ดประวัติศาสตร์ ปส.","Mr sert","LK401"],fol:3976,pt:"L10",photo:"p33",
+   bio:"นักเรียนโรงเรียนมัธยมวัดมกุฏกษัตริย์ สนใจประวัติศาสตร์และวัฒนธรรมไทย เคยทำงานที่พิพิธภัณฑ์วัดบวรนิเวศวิหาร อาคาร ภปร จึงเปิดเพจเผยแพร่ความรู้ด้านศิลปวัฒนธรรมไทย",
+   links:["https://www.facebook.com/share/19ejuYgcTg/","https://youtube.com/@mrsertchannal5542","http://tiktok.com/@danaiwit1410"]},
+  // ---------- โซน 5 ----------
+  {zone:5,type:"mil",name:"พ.อ.หญิง ทัศนีย์ อุ่นเจริญ",unit:"บก.ทท.",pages:["thaitadthaiarmed"],fol:25000,pt:"L12",photo:"p34",
+   bio:"ถ่ายภาพ ตัดต่อ พากย์เสียง บรรยายเรื่องสถาบันพระมหากษัตริย์ เช่น การเฝ้าฯ รับเสด็จฯ พระราชประวัติและพระราชกรณียกิจ และด้านความมั่นคง เช่น ภารกิจของกองทัพและการช่วยเหลือประชาชน",
+   links:["https://www.tiktok.com/@thaitadthaiarmed"]},
+  {zone:5,type:"mil",name:"ร.ต.หญิง โชติกา ไมตรีเปรม",unit:"บก.ทท.",pages:["แพรโช"],fol:700000,pt:"L12",photo:"p35",
+   bio:"อินฟลูเอนเซอร์",links:["https://www.tiktok.com/@parecho1568","https://youtube.com/@chotikamaitriprem"]},
+  {zone:5,type:"mil",name:"พ.อ.ท.หญิง จุฑามาศ รอไกรเพชร",unit:"บก.ทท.",pages:["แฟนต้า แฟนต้า"],fol:160000,pt:"L12",photo:"p36",
+   bio:"ประชาสัมพันธ์และผลิตสื่อดิจิทัลจากประสบการณ์ภารกิจทหารจริง ทั้งถ่ายภาพ วิดีโอ ตัดต่อ เขียนข่าวและคำบรรยาย ถ่ายทอดเรื่องราวกำลังพลจากมุมมองผู้ปฏิบัติงาน",
+   links:["https://www.facebook.com/share/18MyRit3yM/","http://www.tiktok.com/@fanta_0209"]},
+  {zone:5,type:"civ",name:"นาย นพศิริ เฉลยสมัย",pages:["โครงการส่งเสริมและพัฒนาศักยภาพบุคลากรแห่งประเทศไทย","ท.ทหารปลอม (ช่องจริง)","นพศิริ เฉลยสมัย"],fol:4429,pt:"L12",photo:"p37",
+   bio:"content strategist และ script writer ชื่นชอบประวัติศาสตร์และพระราชพิธี",
+   links:["https://www.facebook.com/share/1YcBLK8m5o/","http://www.tiktok.com/@tao_nopsiri","https://www.facebook.com/share/1CFnA4TkPF/"]},
+  {zone:5,type:"civ",name:"นาง ปิยะวรรณ ชัยมา",pages:["ปิยะวรรณ"],fol:330,pt:"L12",photo:"p38",
+   bio:"สื่อประชาสัมพันธ์งานจิตอาสา บรรยายเรื่องงานพิธีและงานราชพิธีให้ประชาชน ส่งข่าวสาร ชี้ทาง อำนวยความสะดวก",links:["https://www.tiktok.com/@user8069991453068"]},
+  {zone:5,type:"civ",name:"นางสาว อุบลรัตน์ ทรงศรีสวัสดิ์",pages:["Luck fancee","Tonluck sp","Tonluckja"],fol:784,pt:"L12",photo:"p39",
+   bio:"บรรยายเหตุการณ์ได้ชัดเจน ประชาสัมพันธ์ให้ทุกคนได้รู้ถึงพระราชพิธี",
+   links:["https://www.tiktok.com/@tonlucksp","https://www.facebook.com/tonja.sk","https://www.instagram.com/tonluckja/"]},
+  {zone:5,type:"civ",name:"นาย ณัฐพจน์ มัทกิจ",pages:["ทสปช.กอ.รมน.66"],fol:1045,pt:"L12",photo:"p40",
+   bio:"เผยแพร่ข้อมูลข่าวสารของหน่วยงาน ทสปช. และ กอ.รมน. ทุกภาคส่วน",links:["https://www.facebook.com/profile.php?id=61584839605767"]},
+
+  // ---------- กลุ่ม ทภ.1 : หน่วยทหาร (ยังไม่ระบุพื้นที่และผู้ประสานงานในตาราง) ----------
+  {zone:6,type:"mil",name:"ร.ท.ปรมะ ธัญรัชฎากุล",unit:"ร.2 พัน.3 รอ.",pages:["Ipeak"],fol:271300,pt:null,photo:"m01",
+   bio:"เล่าเรื่องราวจากประสบการณ์จริงผ่านการพูดบรรยายและภาพประกอบ ทั้งระหว่างปฏิบัติภารกิจ จิตอาสา และการช่วยเหลือประชาชน",
+   links:["https://www.tiktok.com/@peakporramah","https://www.instagram.com/peakporramah/"]},
+  {zone:6,type:"mil",name:"ส.ท.สโรฒม์ ฐานะกาญจน์",unit:"ม.1 รอ.",pages:["คุณอิฐ"],fol:139700,pt:null,photo:"m02",
+   bio:"ครีเอเตอร์สายทหาร เล่าเรื่องจากประสบการณ์จริงระหว่างปฏิบัติภารกิจ จิตอาสา และช่วยเหลือประชาชน",links:["https://www.tiktok.com/@khuneit_04"]},
+  {zone:6,type:"mil",name:"ส.อ.มณเฑียร วุฒิกานนท์",unit:"ม.5 พัน.23 รอ.",pages:["Mos Monthian"],fol:62600,pt:null,photo:"m03",
+   bio:"ครีเอเตอร์สายทหารและไลฟ์สไตล์ นำเสนอเรื่องราวชีวิตผ่านประสบการณ์ปฏิบัติภารกิจ",links:["https://www.facebook.com/share/19UbGxgS1G/"]},
+  {zone:6,type:"mil",name:"จ.ส.อ.จีรวัฒน์ นรินทร์ชาต",unit:"ม.1 พัน.17 รอ.",pages:["JO HN"],fol:45900,pt:null,photo:"m04",
+   bio:"ครีเอเตอร์สายทหารและไลฟ์สไตล์ เล่าเรื่องการปฏิบัติภารกิจ จิตอาสา และการช่วยเหลือประชาชน",links:["https://www.facebook.com/john.69508"]},
+  {zone:6,type:"mil",name:"ส.อ.เทพพร จันทพาท",unit:"ม.5 พัน.24 รอ.",pages:["james_ttr50"],fol:26300,pt:null,photo:"m05",
+   bio:"ครีเอเตอร์สายทหารและไลฟ์สไตล์ นำเสนอเรื่องราวชีวิตผ่านประสบการณ์ปฏิบัติภารกิจ",links:["https://www.tiktok.com/@james_ttr50"]},
+  {zone:6,type:"mil",name:"ส.ท.หญิง ณีรนุช เสือนางรอง",unit:"มทบ.11",pages:["mano_w2000","มะนาว ณีรนุช."],fol:71300,pt:null,photo:"m06",
+   bio:"คิดคอนเทนต์ใหม่ๆ นำเสนอเรื่องราวให้น่าสนใจ มีเอกลักษณ์ บุคลิกสดใส เป็นกันเอง มั่นใจในการสื่อสารกับผู้ติดตาม",
+   links:["https://www.tiktok.com/@manow0802","https://www.instagram.com/mano_w2000","https://www.facebook.com/share/1PPuAFGva1/"]},
+  {zone:6,type:"mil",name:"น.ส. เปรมสุดา สิงหะรา",unit:"มทบ.11",pages:["โยโย่ เปรมสุดา.","premmi_prem","ซีเปรมม."],fol:28600,pt:null,photo:"m07",
+   bio:"ถ่ายทอดเรื่องราวให้เข้าใจง่าย กระชับ เปลี่ยนเรื่องธรรมดาให้เป็นคอนเทนต์ที่น่าติดตาม ปรับสไตล์ได้หลายแบบ",
+   links:["https://www.tiktok.com/@yoyopremsudasinghara","https://www.instagram.com/premmi_prem","https://www.facebook.com/share/1WNwLsM1fa/"]},
+  {zone:6,type:"mil",name:"ร.ท.สรภัค สุรภีร์",unit:"ร.12 พัน.1 รอ.",pages:["I'm โชติ"],fol:10000,pt:null,photo:"m08",
+   bio:"สื่อสารเรื่องราวทางทหารแบบสนทนา ให้ความรู้เรื่องการสอบหรือสมัครนักเรียนเตรียมทหาร",links:["https://www.tiktok.com/@tanchaichote"]},
+  {zone:6,type:"mil",name:"ร.ท.ไชยพัฒน์ รัตนบุตร",unit:"ร.12 พัน.2 รอ.",pages:["CCAN"],fol:13500,pt:null,photo:"m09",
+   bio:"เล่าภารกิจของหน่วยผ่านคลิปวิดีโอพร้อมบรรยาย ทั้งภารกิจทหาร รักษาพระองค์ จิตอาสา ช่วยเหลือประชาชน สลับกับเรื่องส่วนตัว",links:["https://www.tiktok.com/@canchaiyapat"]},
+
+  // ---------- กลุ่ม ทภ.1 : พลเรือน ----------
+  {zone:6,type:"civ",name:"น.ส.ชณัญญา เตชจักรเสมา",pages:["point of view"],fol:4000000,pt:"L13",photo:"c01",
+   bio:"ช่องสาระบันเทิงด้านศิลปวัฒนธรรม ไลฟ์สไตล์ แฟชั่นและความงาม ตัวแม่กูรูนักเล่า ผู้หลงใหลในสุนทรียะแห่งศิลปะ ความงาม และธรรมชาติ",
+   links:["https://youtu.be/m1hxhNpWslc","https://www.facebook.com/pointofview/","https://www.instagram.com/point_of_view_th/","https://www.tiktok.com/@pointofviewth"],
+   coord:T("จ.ส.อ.หญิง อารีวรรณ ป้อมป้องกัน","09 1795 2060"),car:"รถตู้ 1 คัน",pickup:"Silom Grand Terrace",pickupTime:"รอประสาน 13.00",pickupMap:"https://maps.app.goo.gl/bWCVq8sPvF3j9V9N6",area:"ท่าช้าง",ret:"17.00",guide:C_JEERA},
+  {zone:6,type:"civ",name:"นาย กวินรัฏฐ์ ยศอมรสุนทร",pages:["superyuan"],fol:72400,pt:"L13",photo:"c02",
+   bio:"ช่องสาระบันเทิง การแสดง ธรรมะและการทำบุญ สุขภาพและฟิตเนส รวมถึงเกษตรและธุรกิจ",links:["https://www.instagram.com/superyuan/"],
+   coord:C_PRIM,car:"รถตู้ 1 คัน",pickup:"กองทัพภาคที่ 1",pickupTime:"14.00",area:"ท่าช้าง",ret:"17.00",guide:C_JEERA},
+  {zone:6,type:"civ",name:"น.ส. ราวรรณ โทนะหงษา",pages:["rung_nuhin"],fol:3000000,pt:"L13",photo:"c03",
+   bio:"ช่องสาระบันเทิง การแสดงตลก ไลฟ์สไตล์ และธุรกิจ",
+   links:["https://www.tiktok.com/@rung_nuhin","https://www.instagram.com/rung_nuhin/","https://www.facebook.com/runglonglong"],
+   coord:C_PRIM,car:"รถตู้ 1 คัน",pickup:"กองทัพภาคที่ 1",pickupTime:"14.00",area:"ท่าช้าง",ret:"17.00",guide:C_JEERA},
+  {zone:6,type:"civ",name:"น.ส. บัณฑิตา ฐานวิเศษ",pages:["maybuntita"],fol:60000,pt:"L13",photo:"c04",
+   bio:"ช่องสาระบันเทิง การแสดงละคร ไลฟ์สไตล์ และกิจกรรมช่วยเหลือสังคม",
+   links:["https://www.instagram.com/maybuntita/","https://www.threads.com/@maybuntita"],
+   coord:T("พ.อ.หญิง กฤษณี วิเชียรรัตน์","08 4383 3399"),car:"รถตู้ 1 คัน",pickup:"ตามหมุดแผนที่",pickupTime:"12.00",pickupMap:"https://maps.app.goo.gl/y9mmafbt8wR4r3CWA",area:"ท่าช้าง",ret:"17.00",guide:C_JEERA},
+  {zone:6,type:"civ",name:"นาย จุลภัสสร พนมวัน ณ อยุธยา",pages:["นัท จุลภัสสร พนมวัน","Travel by Nut"],fol:4600,pt:"L13",photo:"c05",
+   bio:"ช่องสาระประวัติศาสตร์ไทย ศิลปวัฒนธรรม ขนบธรรมเนียมประเพณี และการท่องเที่ยวเชิงวัฒนธรรม",
+   links:["https://www.facebook.com/nath.cul.phassr.phnm.wan","https://www.youtube.com/channel/UC7KbWFzHAw9UrrSLI1sYMpQ"],
+   coord:T("พ.ต.ท.หญิง วรรณนรี ศรีคง","08 6847 4871"),car:"รถตู้ 1 คัน",pickup:"เข้าพื้นที่พร้อมทีมงาน ท่าพิพิธภัณฑ์",pickupMap:"https://maps.app.goo.gl/7SDT35ZwB1S3mhty7",area:"ท่าช้าง",ret:"17.00",guide:C_JEERA},
+  {zone:6,type:"civ",name:"นาย ประกาศิต เครือบุตร",pages:["Toon Vegan"],fol:2700000,pt:"L13",photo:"c06",
+   bio:"อินฟลูเอนเซอร์ด้านกีฬา เพาะกาย สุขภาพ และอาหารวีแกน (Plant-based) ทำคอนเทนต์ประเด็นสังคมและการปกป้องประเทศผ่านสื่อออนไลน์",
+   links:["https://www.facebook.com/bestbodybyToon","https://www.youtube.com/results?search_query=Toon+Vegan"],
+   coord:C_SET,pickup:"สแตนด์บายที่ บก.ทภ.1",pickupTime:"11.00 น.",area:"ท่าช้าง",ret:"17.00",guide:C_JEERA},
+  {zone:6,type:"civ",name:"นาย ฝันเด่น จรรยาธนากร",pages:["ฝันเด่น จรรยาธนากร"],fol:14500,pt:null,photo:"c07",
+   bio:"ทำคอนเทนต์และกิจกรรมหลักเกี่ยวกับงานจิตอาสา อาสากู้ภัย การช่วยเหลือผู้ประสบภัย และกิจกรรมเพื่อสังคม",
+   links:["https://www.tiktok.com/@fundanalexjunyata","https://www.youtube.com/@alexmarine4393"],
+   coord:C_SET,pickup:"เข้าพื้นที่พร้อมทีมงาน"},
+  {zone:6,type:"civ",name:"นาย ภรัณยู โรจนวุฒิธรรม",pages:["tack_pharunyoo"],fol:1700000,pt:null,photo:"c08",
+   bio:"ช่องสาระบันเทิง ไลฟ์สไตล์ ประเด็นสังคม และงานจิตอาสาช่วยเหลือประชาชน",
+   links:["https://www.instagram.com/tack_pharunyoo/","https://www.facebook.com/aloha.tack","https://www.tiktok.com/@tack_pharunyoo","https://www.youtube.com/@tack2688"],
+   coord:C_SET,pickup:"เข้าพื้นที่พร้อมทีมงาน"},
+  {zone:6,type:"civ",name:"ดร.สุรัตน์ จงดา",pages:["ไก่แก้ว การละคร (The Land of Arts)"],fol:28000,pt:null,photo:"c09",
+   bio:"ผู้เชี่ยวชาญด้านศิลปวัฒนธรรมไทย นาฏศิลป์ ประวัติศาสตร์ และการอนุรักษ์มรดกทางวัฒนธรรม ถ่ายทอดความรู้เรื่องนาฏศิลป์ การแสดงโขน และขนบธรรมเนียมประเพณี",
+   links:["https://www.facebook.com/landofartsbysuratjongda"],
+   area:"จุดที่ 6 สวนเฉลิมพระเกียรติ 72 พรรษา",guide:T("น.อ.กวีวัฒน์ เก่งการ","09 2274 2849")},
+  {zone:6,type:"civ",name:"นาย กิติธีรวัฒน์ จบด้าน",pages:["สเตตุ๊ด (Statud)"],fol:21500,pt:"L8",photo:"c10",
+   bio:"ช่องสาระบันเทิงด้านศิลปวัฒนธรรม ไลฟ์สไตล์ แฟชั่นและความงาม สื่อสารเอกลักษณ์ผ่านการเชื่อมโยงองค์ความรู้แบบกูรู",
+   links:["https://www.facebook.com/SoMuchMe/","https://www.tiktok.com/@statud_golf"],
+   coord:T("พ.ต.หญิง ลลิตพร แก้วสนิท","08 9362 8235"),pickup:"เดินทางส่วนตัว",area:"จุดที่ 5 มหาวิทยาลัยธรรมศาสตร์ ท่าพระจันทร์",guide:T("ร.อ.ปฏิภาณ กองสมบัติ","09 972 1203")},
+  {zone:6,type:"civ",name:"น.ส.ปัณณ์ ภัทราพร",pages:["น้องปัณณ์ ภัทราพร"],fol:600100,pt:"L5",photo:"c11",
+   bio:"ยูทูบเบอร์ มีความสามารถด้านการขับร้องเพลง และมีประสบการณ์จากรายการประกวดร้องเพลง",
+   links:["https://www.youtube.com/channel/UCRnqRluFaQ56cawUdkYfsow","https://www.tiktok.com/@mampunpu2","https://www.facebook.com/profile.php?id=61554943294866","https://www.instagram.com/punnpunn_16/"],
+   area:"จุดที่ 3 สวนสันติชัยปราการ",guide:T("ร.ท.สุวพิชญ์ ธรรมวิชิต","09 6193 9893")}
+];
+
+/* นักเรียน/นักศึกษา เข้าร่วมรับเสด็จฯ (ส่งลงที่ท่าช้าง กลับ 17.00) */
+const GROUPS = [
+  {pt:"L13",name:"จุฬาลงกรณ์มหาวิทยาลัย",count:181,coord:[T("ว่าที่ ร.ต.วิทวัส ศรีโนนยางค์","08 1262 3181")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 5 คัน",
+   pickup:"ลานจอดรถข้างหอประชุมใหญ่ จุฬาฯ",pickupTime:"13.00",pickupMap:"https://maps.app.goo.gl/hZkUaNX3JUwJzDEn8",ret:"17.00",guide:C_JEERA},
+  {pt:"L13",name:"สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง",count:81,coord:[T("ร.ท.นราธรรม ถ้ำสุวรรณ","06 3669 9197"),T("ดร.ทรงศิริ พันธุเสวี","08 6708 5555")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 2 คัน",
+   pickup:"อาคารสำนักงานอธิการบดี",pickupTime:"12.30",pickupMap:"https://maps.app.goo.gl/HaswjdgfMwnuZJPc8",ret:"17.00",guide:C_JEERA},
+  {pt:"L13",name:"มหาวิทยาลัยธรรมศาสตร์",count:60,coord:[T("ร.ท.ภูเมธ ชาติยานนท์","08 3245 3552")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 2 คัน",
+   pickup:"จุดจอดรถริมสระน้ำ อาคารสำนักงานอธิการบดี",pickupTime:"10.30",pickupMap:"https://maps.app.goo.gl/Usa36NNt97QCY2xR6",ret:"17.00",guide:C_JEERA}
+];
+/* ===================== จบส่วนข้อมูล ===================== */
+
+PEOPLE.forEach((p, i) => p.id = "u" + (i + 1));
+const TYPE = {mil:"ทหาร/ตำรวจ", civ:"พลเรือน"};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = n => n == null ? "ไม่ระบุ" : n.toLocaleString("th-TH");
+const short = n => n == null ? "–" : n >= 1e6 ? (n/1e6).toFixed(n%1e6?1:0)+"M" : n >= 1e3 ? (n/1e3).toFixed(n>=1e4?0:1).replace(/\.0$/,"")+"K" : String(n);
+const pt = id => POINTS.find(x => x.id === id);
+const at = id => PEOPLE.filter(p => p.pt === id).sort((a,b) => (b.fol ?? -1) - (a.fol ?? -1));
+const img = p => `photos/${p.photo}.jpg`;
+const zc = z => `--zc:var(--z${z})`;
+let zoneFilter = 0;
+const inZone = p => !zoneFilter || p.zone === zoneFilter;
+const ptMatches = P => !zoneFilter || P.zone === zoneFilter || at(P.id).some(x => x.zone === zoneFilter);
+
+function platform(u){
+  const h = u.replace(/^https?:\/\//,"").replace(/^www\./,"");
+  const map = [["tiktok","TikTok"],["facebook","Facebook"],["instagram","Instagram"],["youtu","YouTube"],["lemon8","Lemon8"],["threads","Threads"]];
+  const hit = map.find(([k]) => h.includes(k));
+  let label = h.replace(/\/$/,"");
+  const hm = h.match(/@[\w.\-]+/); if (hm) label = hm[0];
+  return {plat: hit ? hit[1] : "เว็บไซต์", label};
+}
+const telHtml = c => c ? `<span class="tel">${esc(c.name)}${c.tel ? ` <b>${esc(c.tel)}</b><button class="cp" data-copy="${esc(c.tel.replace(/\s/g,""))}">คัดลอกเบอร์</button>` : ""}</span>` : "";
+const mapLink = (u, t) => u ? ` · <a href="${esc(u)}" target="_blank" rel="noopener">${t || "เปิดแผนที่"}</a>` : "";
+
+/* ---------- Header & filters ---------- */
+function renderStats(){
+  const total = PEOPLE.reduce((s,p) => s + (p.fol || 0), 0);
+  const placed = PEOPLE.filter(p => p.pt).length;
+  $("#stats").innerHTML = `
+    <div class="stat"><b>${PEOPLE.length}</b><span>อินฟลูเอนเซอร์</span></div>
+    <div class="stat"><b>${placed}</b><span>ระบุจุดแล้ว</span></div>
+    <div class="stat"><b>${POINTS.length}</b><span>จุดริมแม่น้ำ</span></div>
+    <div class="stat"><b>${short(total)}</b><span>ผู้ติดตามรวม</span></div>
+    <div class="stat"><b>${GROUPS.reduce((s,g)=>s+g.count,0)}</b><span>นักเรียน/นักศึกษา</span></div>`;
+}
+function renderZones(){
+  const btn = (z, label) => `<button class="zbtn" data-zone="${z}" aria-pressed="${zoneFilter===z}" style="${z?zc(z):""}">${z?'<span class="dot"></span>':""}${label}</button>`;
+  $("#zones").innerHTML = btn(0,"ทั้งหมด") + [1,2,3,4,5,6].map(z => btn(z, `${ZONE_LABEL[z]} · ${PEOPLE.filter(p=>p.zone===z).length}`)).join("");
+}
+
+/* ---------- Satellite map ---------- */
+let map, markers = {}, labelsLayer, editing = false, tileOk = false, tileErr = 0, riverFallback;
+function markerHtml(P){
+  const ps = at(P.id), top = ps[0];
+  return `<div class="mk${ptMatches(P) ? "" : " dim"}" style="${zc(P.zone)}">${top ? `<img src="${img(top)}" alt="">` : ""}<span class="n">${ps.length}</span></div>`;
+}
+function initMap(){
+  if (!window.L){ $("#sat").innerHTML = '<p class="sub" style="padding:16px">โหลดแผนที่ไม่สำเร็จ ลองเปิดใหม่อีกครั้ง หรือใช้แท็บผังริมน้ำ</p>'; return; }
+  map = L.map("sat", {zoomControl:true, attributionControl:true}).setView([13.760, 100.494], 15);
+  const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {maxZoom:19, attribution:"ภาพดาวเทียม © Esri, Maxar, Earthstar Geographics"}).addTo(map);
+  labelsLayer = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", {maxZoom:19}).addTo(map);
+  sat.on("tileload", () => { tileOk = true; $("#notice").hidden = true; if (riverFallback){ map.removeLayer(riverFallback); riverFallback = null; } });
+  sat.on("tileerror", () => { if (!tileOk && ++tileErr === 3) showFallback(); });
+
+  const startIdx = 2; // จุดในเส้นแม่น้ำที่อยู่ก่อนท่าวาสุกรี
+  const route = [ROUTE_START.at, ...RIVER.slice(startIdx + 1, RIVER.length - 1)];
+  L.polyline(route, {color:"#ffffff", weight:9, opacity:.55}).addTo(map);
+  L.polyline(route, {color:getCss("--route"), weight:5, dashArray:"12 8"}).addTo(map);
+  [ROUTE_START, ROUTE_END].forEach(e => L.circleMarker(e.at, {radius:8, color:"#13242b", weight:3, fillColor:getCss("--route"), fillOpacity:1})
+    .addTo(map).bindTooltip(e.name, {permanent:true, direction:"top", offset:[0,-8], className:"endpt"}));
+
+  POINTS.forEach(P => {
+    const m = L.marker([P.lat, P.lng], {icon:L.divIcon({className:"", html:markerHtml(P), iconSize:[48,48], iconAnchor:[24,24]}), draggable:false, riseOnHover:true}).addTo(map);
+    m.bindTooltip(P.name, {permanent:true, direction:P.bank === "w" ? "left" : "right", offset:P.bank === "w" ? [-26,0] : [26,0], className:"lbl"});
+    m.on("click", () => { if (!editing) showPoint(P.id); });
+    m.on("dragend", () => { const ll = m.getLatLng(); P.lat = +ll.lat.toFixed(5); P.lng = +ll.lng.toFixed(5); writeCoords(); });
+    markers[P.id] = m;
+  });
+  map.on("zoomend", () => {
+    const show = map.getZoom() >= 15;
+    Object.values(markers).forEach(m => { const t = m.getTooltip(); if (t) show ? m.openTooltip() : m.closeTooltip(); });
+    if (riverFallback) riverFallback.setStyle({weight: riverPx()});
+  });
+  fitAll();
+}
+function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || "#f2c230"; }
+function fitAll(){ if (map) map.fitBounds(L.latLngBounds(POINTS.map(p => [p.lat, p.lng])).pad(0.12)); }
+function riverPx(){ const mpp = 156543.03 * Math.cos(13.76 * Math.PI/180) / Math.pow(2, map.getZoom()); return Math.max(6, 260 / mpp); }
+function showFallback(){
+  $("#notice").hidden = false;
+  $("#notice").textContent = "ภาพดาวเทียมโหลดไม่ได้ในหน้าตัวอย่างนี้ เปิดผ่านเว็บที่ deploy (เช่น GitHub Pages) จะเห็นภาพดาวเทียมจริง ตอนนี้แสดงแนวแม่น้ำแทน";
+  map.removeLayer(labelsLayer); $("#b-labels").setAttribute("aria-pressed","false");
+  riverFallback = L.polyline(RIVER, {color:getCss("--river"), weight:riverPx(), opacity:.75, lineCap:"round", lineJoin:"round"}).addTo(map);
+  riverFallback.bringToBack();
+}
+function refreshMarkers(){ if (!map) return; POINTS.forEach(P => markers[P.id].setIcon(L.divIcon({className:"", html:markerHtml(P), iconSize:[48,48], iconAnchor:[24,24]}))); }
+function writeCoords(){ $("#coords").value = POINTS.map(p => `${p.id}  lat:${p.lat}, lng:${p.lng}  // ${p.name}`).join("\n"); }
+
+function renderUnplaced(){
+  const list = PEOPLE.filter(p => !p.pt && inZone(p));
+  $("#unplaced").innerHTML = list.length ? `<h3>ยังไม่ระบุจุดบนแผนที่ (${list.length} คน)</h3>
+    <div class="grid">${list.map(cardHtml).join("")}</div>` : "";
+}
+
+/* ---------- Schematic ---------- */
+function renderSchematic(){
+  let row = 0, html = "";
+  POINTS.forEach(p => {
+    if (p.bridge){ row++; html += `<div class="bridge" style="grid-row:${row}"><span>${esc(p.bridge)}</span></div>`; }
+    if (!p.pair) row++;
+    const ps = at(p.id), shown = ps.slice(0, 5);
+    html += `<div class="cell ${p.bank}" style="grid-row:${row};${zc(p.zone)}">
+      <button class="pt${ptMatches(p) ? "" : " dim"}" data-pt="${p.id}">
+        <span class="pt-zone">${ZONE_LABEL[p.zone]}</span>
+        <span class="pt-name">${esc(p.name)}</span>
+        <span class="stack"><span class="faces">${shown.map(x => `<img src="${img(x)}" alt="" loading="lazy">`).join("")}</span>
+        <span class="cnt">${ps.length} คน</span></span>
+      </button></div>`;
+  });
+  $("#map").innerHTML = `<span class="rlabel">แม่น้ำเจ้าพระยา</span>` + html;
+}
+
+/* ---------- List ---------- */
+function cardHtml(p){
+  const P = pt(p.pt);
+  return `<button class="pc" data-person="${p.id}" style="${zc(p.zone)}">
+    <img src="${img(p)}" alt="" loading="lazy">
+    <div><b>${esc(p.name)}</b>
+    <small>${esc(p.pages[0] || "ไม่ระบุเพจ")} · ${short(p.fol)}</small>
+    <small><span class="tag">${TYPE[p.type]}</span>${P ? esc(P.name) : esc(p.area || "ยังไม่ระบุจุด")}</small>
+    ${p.coord ? `<small>ผู้ประสาน: ${esc(p.coord.name)}</small>` : ""}</div></button>`;
+}
+function renderList(){
+  const q = $("#q").value.trim().toLowerCase(), t = $("#ftype").value, s = $("#fsort").value;
+  let list = PEOPLE.filter(p => inZone(p) && (!t || p.type === t) &&
+    (!q || [p.name, p.unit, ...p.pages, p.pt ? pt(p.pt).name : "", p.area, p.coord?.name, p.guide?.name].join(" ").toLowerCase().includes(q)));
+  if (s === "fol") list = [...list].sort((a,b) => (b.fol ?? -1) - (a.fol ?? -1));
+  $("#count").textContent = `แสดง ${list.length} จาก ${PEOPLE.length} คน`;
+  $("#grid").innerHTML = list.length ? list.map(cardHtml).join("") : '<p class="muted">ไม่พบรายชื่อที่ตรงกับการค้นหา</p>';
+}
+
+/* ---------- Sheets ---------- */
+const sheet = $("#sheet"), sb = $("#sb");
+function open(html, z){ sb.setAttribute("style", zc(z)); sb.innerHTML = html; if (!sheet.open) sheet.showModal(); sheet.scrollTop = 0; }
+
+function showPoint(id){
+  const P = pt(id), ps = at(id), gs = GROUPS.filter(g => g.pt === id);
+  open(`<div class="head"><div>
+      <div class="pt-zone">${ZONE_LABEL[P.zone]} · ${P.bank === "w" ? "ฝั่งธนบุรี" : "ฝั่งพระนคร"}</div>
+      <h2>${esc(P.name)}</h2></div>
+      <button class="close" data-close>ปิด</button></div>
+    <p class="sec">อินฟลูเอนเซอร์ประจำจุด ${ps.length} คน</p>
+    <div class="grid">${ps.map(cardHtml).join("")}</div>
+    ${gs.length ? `<p class="sec">นักเรียน/นักศึกษาเข้าร่วมรับเสด็จฯ ${gs.reduce((s,g)=>s+g.count,0)} คน</p>
+      ${gs.map(g => `<div class="grp"><b>${esc(g.name)} · ${g.count} ราย</b>
+        <dl class="kv">
+          <dt>ผู้ประสานงานสถานศึกษา</dt><dd>${g.coord.map(telHtml).join("<br>")}</dd>
+          <dt>ข้อมูลรถ</dt><dd>${esc(g.car)}</dd>
+          <dt>จุดรับขึ้น</dt><dd>${esc(g.pickup)} (เวลารับ ${esc(g.pickupTime)})${mapLink(g.pickupMap)}</dd>
+          <dt>เวลากลับ</dt><dd>${esc(g.ret)}</dd>
+          <dt>ผู้พาเข้าพื้นที่</dt><dd>${telHtml(g.guide)}</dd>
+        </dl></div>`).join("")}` : ""}`, P.zone);
+}
+
+function showPerson(id){
+  const x = PEOPLE.find(p => p.id === id), P = pt(x.pt);
+  const links = x.links.map(u => { const {plat,label} = platform(u);
+    return `<li><a href="${esc(u)}" target="_blank" rel="noopener"><span class="plat">${plat}</span>${esc(label)}</a></li>`; }).join("");
+  const hasCoord = x.coord || x.guide || x.car || x.pickup || x.area;
+  const coordBlock = hasCoord ? `<p class="sec">การประสานงาน</p><div class="coord"><dl class="kv">
+      ${x.coord ? `<dt>ผู้ประสานงาน Influencer</dt><dd>${telHtml(x.coord)}</dd>` : ""}
+      ${x.car ? `<dt>ข้อมูลรถ</dt><dd>${esc(x.car)}</dd>` : ""}
+      ${x.pickup ? `<dt>จุดรับขึ้น</dt><dd>${esc(x.pickup)}${x.pickupTime ? ` (เวลารับ ${esc(x.pickupTime)})` : ""}${mapLink(x.pickupMap)}</dd>` : ""}
+      ${x.area ? `<dt>พื้นที่รับเสด็จ</dt><dd>${esc(x.area)}${x.ret ? ` (กลับ ${esc(x.ret)})` : ""}</dd>` : ""}
+      ${x.guide ? `<dt>ผู้ประสานงานพาเข้าพื้นที่</dt><dd>${telHtml(x.guide)}</dd>` : ""}
+    </dl></div>`
+    : `<p class="sec">การประสานงาน</p><p class="muted" style="margin:0">ยังไม่มีข้อมูลผู้ประสานงานในเอกสารต้นทาง</p>`;
+  open(`${P ? `<button class="back" data-pt="${P.id}">‹ ${ZONE_LABEL[P.zone]} · ${esc(P.name)}</button>` : ""}
+    <div class="head"><img class="big" src="${img(x)}" alt="">
+      <div><span class="tag">${TYPE[x.type]}</span><span class="tag">${ZONE_LABEL[x.zone]}</span><h2>${esc(x.name)}</h2>${x.unit ? `<div class="muted">${esc(x.unit)}</div>` : ""}</div>
+      <button class="close" data-close>ปิด</button></div>
+    <dl class="kv">
+      <dt>ผู้ติดตาม</dt><dd>${fmt(x.fol)}${x.folNote ? ` (${esc(x.folNote)})` : ""}</dd>
+      <dt>จุดปฏิบัติงาน</dt><dd>${P ? esc(P.name) : esc(x.area || "ยังไม่ระบุ")}</dd>
+      <dt>ชื่อเพจ</dt><dd>${x.pages.length ? x.pages.map(esc).join("<br>") : "ไม่ระบุ"}</dd>
+    </dl>
+    ${coordBlock}
+    ${x.bio ? `<p class="sec">คุณสมบัติ</p><p class="bio">${esc(x.bio)}</p>` : ""}
+    ${links ? `<p class="sec">ลิงก์เพจ</p><ul class="links">${links}</ul>` : ""}`, x.zone);
+}
+
+/* ---------- Events ---------- */
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-copy]");
+  if (c){ const v = c.dataset.copy;
+    const done = () => { c.textContent = "คัดลอกแล้ว"; setTimeout(() => c.textContent = "คัดลอกเบอร์", 1500); };
+    (navigator.clipboard?.writeText(v) || Promise.reject()).then(done).catch(() => {
+      const r = document.createRange(); r.selectNodeContents(c.previousElementSibling); const s = getSelection(); s.removeAllRanges(); s.addRange(r); });
+    return; }
+  const t = e.target.closest("[data-person],[data-pt],[data-close],[data-zone]");
+  if (!t) return;
+  if (t.dataset.zone !== undefined){ const z = +t.dataset.zone; zoneFilter = zoneFilter === z ? 0 : z; renderAll(); return; }
+  if (t.dataset.close !== undefined) return sheet.close();
+  if (t.dataset.person) return showPerson(t.dataset.person);
+  if (t.dataset.pt) return showPoint(t.dataset.pt);
+});
+sheet.addEventListener("click", e => { if (e.target === sheet) sheet.close(); });
+
+const TABS = {sat:"#view-sat", map:"#view-map", list:"#view-list"};
+function setTab(w){
+  Object.entries(TABS).forEach(([k, sel]) => { $("#tab-" + k).setAttribute("aria-selected", k === w); $(sel).hidden = k !== w; });
+  if (w === "sat" && map) setTimeout(() => map.invalidateSize(), 0);
+}
+Object.keys(TABS).forEach(k => $("#tab-" + k).onclick = () => setTab(k));
+["#q","#ftype","#fsort"].forEach(s => $(s).addEventListener("input", renderList));
+
+$("#b-labels").onclick = e => { if (!map) return; const on = map.hasLayer(labelsLayer);
+  on ? map.removeLayer(labelsLayer) : map.addLayer(labelsLayer); e.currentTarget.setAttribute("aria-pressed", !on); };
+$("#b-fit").onclick = fitAll;
+$("#b-edit").onclick = e => { editing = !editing; e.currentTarget.setAttribute("aria-pressed", editing);
+  Object.values(markers).forEach(m => editing ? m.dragging.enable() : m.dragging.disable());
+  $("#edit-panel").hidden = !editing; writeCoords(); };
+$("#b-copycoords").onclick = e => { const ta = $("#coords");
+  (navigator.clipboard?.writeText(ta.value) || Promise.reject()).then(() => e.target.textContent = "คัดลอกแล้ว").catch(() => ta.select()); };
+
+function renderAll(){ renderZones(); renderSchematic(); renderList(); renderUnplaced(); refreshMarkers(); }
+renderStats(); initMap(); renderAll();
+</script>
