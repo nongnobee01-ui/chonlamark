@@ -876,6 +876,39 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
 .tpp .tfit{position:absolute;z-index:500;top:10px;right:10px;font:600 13px var(--display);background:rgb(255 255 255 / .94);color:#13242b;border:1px solid #c9d3d6;border-radius:8px;padding:5px 10px;cursor:pointer}
 .tlo .tlb.geo,.tlo .tlb.pol,.tlo .tlb.palace{display:none}
 @media (max-width:560px){.tcm img{width:26px;height:26px}.tzm{width:36px;height:36px;font-size:20px;line-height:30px}.tlb.unit{font-size:12px}}
+
+/* ---- ถปภ. detail sheet ---- */
+#tdlg{border:0;padding:0;background:var(--surface);color:var(--fg);border-radius:16px;width:min(580px,calc(100% - 24px));max-height:88vh;overflow:auto;box-shadow:0 10px 40px rgb(0 0 0 / .35)}
+#tdlg::backdrop{background:rgb(5 15 20 / .55)}
+.tds{padding:18px 18px 22px;display:grid;gap:14px}
+.tds .hd{display:flex;gap:14px;align-items:center}
+.tds .hd>div{min-width:0}
+.tds .hd h2{font:700 21px/1.25 var(--display);margin:2px 0 0;text-wrap:balance}
+.tds .hd .sub{color:var(--muted);font-size:14px}
+.tds .big{width:104px;height:104px;border-radius:50%;object-fit:cover;flex:none;border:4px solid var(--qc);background:var(--line)}
+.tds .znb{width:64px;height:64px;border-radius:50%;flex:none;background:var(--qc);color:#fff;font:700 30px/64px var(--display);text-align:center}
+.tds .x{margin-left:auto;align-self:flex-start;background:var(--bg);border:2px solid var(--qc);color:var(--fg);border-radius:10px;padding:5px 14px;cursor:pointer;font:600 15px var(--body)}
+.tds .bk{background:none;border:0;color:var(--qc);font:600 14px var(--body);cursor:pointer;padding:0;justify-self:start;text-align:left}
+.tds .tg{display:inline-block;font:600 11.5px var(--display);border-radius:5px;padding:1px 8px;margin-right:4px;background:color-mix(in srgb,var(--qc) 16%,var(--surface));color:var(--fg)}
+.tds dl{display:grid;grid-template-columns:max-content 1fr;gap:8px 16px;margin:0}
+.tds dt{color:var(--muted);font-size:13.5px;padding-top:1px}
+.tds dd{margin:0;min-width:0;overflow-wrap:anywhere;font-size:15px}
+.tds .sec{font:600 12.5px var(--display);letter-spacing:.06em;color:var(--muted);margin:0}
+.tds .tel{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tds .tel b{font:700 17px var(--display);font-variant-numeric:tabular-nums;user-select:all}
+.tds .photo{width:100%;border-radius:12px;display:block;border:1px solid var(--line)}
+.tds .rows{display:grid;gap:6px}
+.tds .row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:6px 8px;cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%}
+.tds .row:hover{border-color:var(--qc)}
+.tds .row img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--qc)}
+.tds .row img.sq{width:72px;height:42px;border-radius:6px;border:0}
+.tds .row b{display:block;font-weight:600;line-height:1.3}
+.tds .row span{font-size:12.5px;color:var(--muted)}
+.tds .row em{font:700 14px var(--display);font-style:normal;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tpp .tp,.tpp .tar2{cursor:pointer;border-radius:8px}
+.tpp .tp:hover,.tpp .tar2:hover{background:var(--bg)}
+@media (prefers-reduced-motion:no-preference){#tdlg[open]{animation:tup .18s ease-out}@keyframes tup{from{transform:translateY(14px);opacity:.6}}}
+
 .tpp .tnote{font-size:12px;color:var(--muted);margin:6px 0 0}
 .tzm{width:44px;height:44px;border-radius:50%;background:#3a2268;border:3px solid #fff;color:#fff;font:700 24px/38px var(--display);text-align:center;box-shadow:0 2px 8px rgb(0 0 0 / .5);transform:translate(-50%,-50%)}
 .tcm{display:flex;width:max-content;transform:translate(-50%,-50%);background:rgb(255 255 255 / .95);border:2px solid var(--qc);border-radius:24px;padding:2px;gap:0;box-shadow:0 2px 8px rgb(0 0 0 / .4);cursor:pointer}
@@ -1590,7 +1623,47 @@ const TPP_IMG = "tpp/";
   if (TPP.safe.length) LAYERS.push(["safe","พื้นที่ปลอดภัย S",true]);
   if (TPP.piers.length) LAYERS.push(["piers","ท่าเรือ VVIP",true]);
 
-  const person = p => `<div class="tp"><img src="${TPP_IMG}${p.ph}.jpg" alt="" loading="lazy"><div><b>${e(p.name)}<span class="tk">${e(p.kind)}</span></b><span>${e(p.pos)}</span></div>${p.tel ? `<div class="ttel"><b>${e(p.tel)}</b><button class="tcp" data-tcopy="${e(p.tel.replace(/\D/g,""))}">คัดลอก</button></div>` : "<span></span>"}</div>`;
+  const person = p => `<div class="tp" data-tpid="${p._id}"><img src="${TPP_IMG}${p.ph}.jpg" alt="" loading="lazy"><div><b>${e(p.name)}<span class="tk">${e(p.kind)}</span></b><span>${e(p.pos)}</span></div>${p.tel ? `<div class="ttel"><b>${e(p.tel)}</b><button class="tcp" data-tcopy="${e(p.tel.replace(/\D/g,""))}">คัดลอก</button></div>` : "<span></span>"}</div>`;
+
+  TPP.zones.forEach(z => z.ppl.forEach((p,i) => { p._id = "z" + z.z + "-" + i; p._z = z.z; }));
+  TPP.navy.forEach((p,i) => { p._id = "n" + i; p._z = 0; });
+  const PBY = {}; TPP.zones.forEach(z => z.ppl.forEach(p => PBY[p._id] = p)); TPP.navy.forEach(p => PBY[p._id] = p);
+  const NAVYC = "#1f3f8f";
+  const phs = id => (window.TPP_PH && TPP_PH[id]) || (TPP_IMG + id + ".jpg");
+  const aph = n => (window.TPP_PH && TPP_PH["a" + n]) || (TPP_IMG + "a" + n + ".jpg");
+  let tdlg = document.getElementById("tdlg");
+  if (!tdlg){ tdlg = document.createElement("dialog"); tdlg.id = "tdlg"; tdlg.innerHTML = '<div class="tds" id="tds"></div>'; document.body.appendChild(tdlg);
+    tdlg.addEventListener("click", ev => { if (ev.target === tdlg) tdlg.close(); }); }
+  const telH = t => t ? `<span class="tel"><b>${e(t)}</b><button class="tcp" data-tcopy="${e(t.replace(/\D/g,""))}">คัดลอกเบอร์</button></span>` : "ไม่ระบุ";
+  function sheet(html, color){ const b = document.getElementById("tds"); b.setAttribute("style", "--qc:" + color); b.innerHTML = html; if (!tdlg.open) tdlg.showModal(); tdlg.scrollTop = 0; }
+  const X = '<button class="x" data-tclose>ปิด</button>';
+  function showPerson(id){
+    const p = PBY[id]; if (!p) return; const z = TPP.zones.find(q => q.z === p._z);
+    const col = z ? ZC[z.z] : NAVYC;
+    sheet(`${z ? `<button class="bk" data-tzone="${z.z}">‹ Zone ${z.z} · ${e(z.unit)}</button>` : ""}
+      <div class="hd"><img class="big" src="${phs(p.ph)}" alt=""><div><span class="tg">${e(p.kind)}</span>${z ? `<span class="tg">Zone ${z.z}</span>` : `<span class="tg">หมู่เรือ ทร.</span>`}<h2>${e(p.name)}</h2><div class="sub">${e(p.pos)}</div></div>${X}</div>
+      <dl>${z ? `<dt>ศปก.</dt><dd>${e(z.unit)}</dd><dt>พื้นที่</dt><dd>${e(z.bank)} · ${e(z.range)}</dd>` : `<dt>หน่วย</dt><dd>หมวดเรือเฉพาะกิจถวายความปลอดภัยทางน้ำ</dd>`}
+      <dt>เบอร์โทร</dt><dd>${telH(p.tel)}</dd></dl>
+      ${z ? `<p class="sec">ผู้บังคับหน่วยอื่นในโซนนี้</p><div class="rows">${z.ppl.filter(q => q !== p).map(rowP).join("")}</div>` : ""}`, col);
+  }
+  const rowP = p => `<button class="row" data-tpid="${p._id}"><img src="${phs(p.ph)}" alt=""><div><b>${e(p.name)}</b><span>${e(p.pos)} · ${e(p.kind)}</span></div><em>${e(p.tel || "")}</em></button>`;
+  const rowA = a => `<button class="row" data-tarea="${a.n}"><img class="sq" src="${aph(a.n)}" alt=""><div><b>${a.n}. ${e(a.name)}</b><span>ประชาชน ${nf(a.count)} คน</span></div><em>›</em></button>`;
+  function showZone(n){
+    const z = TPP.zones.find(q => q.z === n); if (!z) return; const as = TPP.areas.filter(a => a.z === n);
+    const sf = (TPP.safe || []).filter(s => s.z === n);
+    sheet(`<div class="hd"><div class="znb">${n}</div><div><span class="tg">${e(z.bank)}</span><h2>Zone ${n} · ${e(z.unit)}</h2><div class="sub">${e(z.range)} · ประชาชน ${nf(as.reduce((s,a) => s + a.count, 0))} คน</div></div>${X}</div>
+      <p class="sec">ผู้บังคับหน่วย</p><div class="rows">${z.ppl.map(rowP).join("")}</div>
+      <p class="sec">พื้นที่เฝ้ารับเสด็จฯ ${as.length} พื้นที่</p><div class="rows">${as.map(rowA).join("")}</div>
+      ${sf.length ? `<p class="sec">พื้นที่ปลอดภัยในโซน</p><div class="rows">${sf.map(s => `<div class="row" style="cursor:default"><span style="font:700 18px var(--display);color:#c00">S</span><div><b>${e(s.name)}</b></div><em></em></div>`).join("")}</div>` : ""}`, ZC[n]);
+  }
+  function showArea(n){
+    const a = TPP.areas.find(q => q.n === n); if (!a) return; const z = TPP.zones.find(q => q.z === a.z);
+    sheet(`<button class="bk" data-tzone="${a.z}">‹ Zone ${a.z} · ${e(z.unit)}</button>
+      <div class="hd"><div class="znb" style="width:56px;height:56px;line-height:56px;font-size:24px;background:#ffe600;color:#111;border:2px solid #333">${a.n}</div><div><span class="tg">Zone ${a.z}</span><span class="tg">${e(z.bank)}</span><h2>${e(a.name)}</h2></div>${X}</div>
+      <img class="photo" src="${aph(a.n)}" alt="">
+      <dl><dt>ประชาชน</dt><dd><b style="font:700 20px var(--display)">${nf(a.count)}</b> คน</dd><dt>รับผิดชอบโดย</dt><dd>${e(z.unit)}</dd></dl>
+      <p class="sec">ผู้บังคับหน่วยโซน ${a.z}</p><div class="rows">${z.ppl.map(rowP).join("")}</div>`, ZC[a.z]);
+  }
   function cards(){
     const sumz = z => TPP.areas.filter(a => a.z === z).reduce((s,a) => s + a.count, 0);
     $t("#tsum").innerHTML = TPP.zones.map(z => `<button class="tz" data-tz="${z.z}" aria-pressed="${tzone===z.z}" style="${qc(z.z)}"><b>โซน ${z.z}</b><span>${e(z.unit)}</span><span>${e(z.range)} · ${nf(sumz(z.z))} คน</span></button>`).join("");
@@ -1600,7 +1673,7 @@ const TPP_IMG = "tpp/";
     const tot = TPP.areas.reduce((s,a) => s + a.count, 0);
     $t("#tareasum").innerHTML = `<div class="tchk">รวมตามรายการพื้นที่ ${nf(tot)} คน · เอกสารระบุยอดรวม ${nf(TPP.docTotal)} คน (ไม่ตรงกัน ควรตรวจสอบกับหน่วย)</div>`;
     $t("#tareas").innerHTML = zs.map(z => { const list = TPP.areas.filter(a => a.z === z.z);
-      return `<div class="tzc" style="${qc(z.z)}"><h3><span class="zn">โซน ${z.z}</span>${e(z.unit)}<small>${nf(list.reduce((s,a)=>s+a.count,0))} คน</small></h3><div class="tal">${list.map(a => `<div class="tar2"><i>${a.n}</i><img src="${(window.TPP_PH && TPP_PH["a"+a.n]) || TPP_IMG + "a" + a.n + ".jpg"}" alt="" loading="lazy" data-aimg="${a.n}" data-acap="${e(a.n + ". " + a.name)}"><span>${e(a.name)}</span><em>${nf(a.count)}</em></div>`).join("")}</div></div>`; }).join("");
+      return `<div class="tzc" style="${qc(z.z)}"><h3><span class="zn">โซน ${z.z}</span>${e(z.unit)}<small>${nf(list.reduce((s,a)=>s+a.count,0))} คน</small></h3><div class="tal">${list.map(a => `<div class="tar2" data-tarea="${a.n}"><i>${a.n}</i><img src="${(window.TPP_PH && TPP_PH["a"+a.n]) || TPP_IMG + "a" + a.n + ".jpg"}" alt="" loading="lazy" data-aimg="${a.n}" data-acap="${e(a.n + ". " + a.name)}"><span>${e(a.name)}</span><em>${nf(a.count)}</em></div>`).join("")}</div></div>`; }).join("");
   }
   function lbtns(){ $t("#tlayers").innerHTML = LAYERS.map(([k,l]) => `<button class="tl" data-tl="${k}" aria-pressed="${!!(tmap && layers[k] && tmap.hasLayer(layers[k]))}">${l}</button>`).join(""); }
   function init(){
@@ -1613,16 +1686,16 @@ const TPP_IMG = "tpp/";
       if (!p.fill) { st.dashArray = "10 7"; st.weight = 3; st.color = "#ff2020"; }
       (p.fill ? L.polygon(path, st) : L.polyline(path, st)).addTo(gz);
     }));
-    TPP.zoneMarks.forEach(m => L.marker(m.at, {icon:L.divIcon({className:"", html:`<div class="tzm">${m.z}</div>`, iconSize:[0,0]})}).on("click", () => focusZone(m.z)).addTo(gz));
+    TPP.zoneMarks.forEach(m => L.marker(m.at, {icon:L.divIcon({className:"", html:`<div class="tzm">${m.z}</div>`, iconSize:[0,0]})}).on("click", () => showZone(m.z)).addTo(gz));
     TPP.labels.forEach(l => L.marker(l.at, {opacity:0, interactive:false, icon:L.divIcon({className:"", iconSize:[0,0]})}).bindTooltip(l.t, {permanent:true, direction:"center", className:"tlb " + l.c}).addTo(gz));
     L.circleMarker(TPP.star, {radius:7, color:"#c00", weight:2, fillColor:"#ffe600", fillOpacity:1}).addTo(gz);
     layers.zones = gz;
     const gc = L.layerGroup();
     TPP.zones.forEach(z => { const m = TPP.zoneMarks.find(x => x.z === z.z); if (!m) return;
-      const off = CMD_OFF[z.z] || [0,0]; L.marker([m.at[0] + off[0], m.at[1] + off[1]], {icon:L.divIcon({className:"", html:`<div class="tcm" style="--qc:${ZC[z.z]}">${z.ppl.map(p => `<img src="${TPP_IMG}${p.ph}.jpg" alt="">`).join("")}</div>`, iconSize:[0,0]})}).on("click", () => focusZone(z.z)).addTo(gc); });
+      const off = CMD_OFF[z.z] || [0,0]; L.marker([m.at[0] + off[0], m.at[1] + off[1]], {icon:L.divIcon({className:"", html:`<div class="tcm" style="--qc:${ZC[z.z]}">${z.ppl.map(p => `<img src="${TPP_IMG}${p.ph}.jpg" alt="">`).join("")}</div>`, iconSize:[0,0]})}).on("click", () => showZone(z.z)).addTo(gc); });
     layers.cmd = gc;
     const ga = L.layerGroup();
-    TPP.areas.forEach(a => L.marker(a.at, {icon:L.divIcon({className:"", html:`<div class="tar">${a.n}</div>`, iconSize:[0,0]})}).bindPopup(`<b>${a.n}. ${e(a.name)}</b><br>โซน ${a.z} · ประชาชน ${nf(a.count)} คน`).addTo(ga));
+    TPP.areas.forEach(a => L.marker(a.at, {icon:L.divIcon({className:"", html:`<div class="tar">${a.n}</div>`, iconSize:[0,0]})}).on("click", () => showArea(a.n)).addTo(ga));
     layers.areas = ga;
     if (TPP.safe.length){ const g = L.layerGroup(); TPP.safe.forEach((s,i) => L.marker(s.at, {icon:L.divIcon({className:"", html:`<div class="tic"><img src="${TPP_IMG}s-icon.png" style="width:30px;height:auto" alt=""></div>`, iconSize:[0,0]})}).bindPopup(`<b>พื้นที่ปลอดภัย ${i+1}</b><br>${e(s.name)} (โซน ${s.z})`).addTo(g)); layers.safe = g; }
     if (TPP.piers.length){ const g = L.layerGroup(); TPP.piers.forEach(p => L.marker(p.at, {icon:L.divIcon({className:"", html:`<div class="tic"><img src="${TPP_IMG}pier-icon.png" style="width:22px;height:22px" alt=""><b>${p.n}</b></div>`, iconSize:[0,0]})}).bindPopup(`<b>ท่าเรือ VVIP ${p.n}</b><br>${e(p.name)}`).addTo(g)); layers.piers = g; }
@@ -1643,6 +1716,12 @@ const TPP_IMG = "tpp/";
     if (tzone) { const c = $t("#tzc-" + z); if (c) c.scrollIntoView({behavior:"smooth", block:"nearest"}); }
   }
   document.addEventListener("click", ev => {
+    if (ev.target.closest("[data-tclose]")) { tdlg.close(); return; }
+    if (ev.target.closest("[data-tcopy]")) { /* handled below */ } else {
+      const pz = ev.target.closest("[data-tpid]"); if (pz) { showPerson(pz.dataset.tpid); return; }
+      const ar = ev.target.closest("[data-tarea]"); if (ar) { showArea(+ar.dataset.tarea); return; }
+      const zz = ev.target.closest("[data-tzone]"); if (zz) { showZone(+zz.dataset.tzone); return; }
+    }
     const z = ev.target.closest("[data-tz]"); if (z) { focusZone(+z.dataset.tz); return; }
     const l = ev.target.closest("[data-tl]"); if (l && tmap) { const g = layers[l.dataset.tl]; tmap.hasLayer(g) ? tmap.removeLayer(g) : g.addTo(tmap); lbtns(); return; }
     const ai = ev.target.closest("[data-aimg]"); if (ai) { const v = document.createElement("div"); v.className = "aimgv"; v.innerHTML = `<div style="display:grid;justify-items:center"><img src="${ai.src}" alt=""><b>${ai.dataset.acap}</b></div>`; v.onclick = () => v.remove(); document.body.appendChild(v); return; }
