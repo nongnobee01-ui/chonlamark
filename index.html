@@ -782,6 +782,15 @@ h1{font-family:var(--display);font-size:clamp(22px,4.6vw,32px);line-height:1.15;
 .edit-panel textarea{width:100%;min-height:120px;font:12px ui-monospace,monospace;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);padding:8px}
 .unplaced{margin-top:16px}
 .unplaced h3{font:600 15px var(--display);margin:0 0 8px}
+.ubar{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;border-bottom:3px solid var(--zc);padding-bottom:6px;margin-bottom:10px}
+.ubar b{font:700 20px var(--display);color:var(--zc)}
+.ubar span{color:var(--muted);font-size:13.5px}
+.ugrp{margin-bottom:14px}
+.uhd{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:0 0 6px;color:inherit;font:inherit;cursor:pointer;text-align:left}
+div.uhd{cursor:default}
+.uhd .unum{flex:none;min-width:30px;height:30px;border-radius:8px;background:var(--zc);color:#fff;font:700 14px/30px var(--display);text-align:center;padding:0 6px}
+.uhd b{font:600 16px/1.3 var(--display);min-width:0}
+.uhd em{margin-left:auto;font-style:normal;font-size:13px;color:var(--muted);white-space:nowrap}
 
 /* Schematic */
 .banks{display:grid;grid-template-columns:1fr 40px 1fr;column-gap:10px;font:600 12px var(--display);color:var(--muted);letter-spacing:.06em;margin-bottom:6px}
@@ -1430,9 +1439,20 @@ function refreshMarkers(){ if (!map) return; POINTS.forEach(P => markers[P.id].s
 function writeCoords(){ $("#coords").value = POINTS.map(p => `${p.id}  lat:${p.lat}, lng:${p.lng}  // ${ptName(p)}`).join("\n"); }
 
 function renderUnplaced(){
-  const list = PEOPLE.filter(p => !p.pt && inZone(p));
-  $("#unplaced").innerHTML = list.length ? `<h3>ยังไม่ระบุจุดบนแผนที่ (${list.length} คน)</h3>
-    <div class="grid">${list.map(cardHtml).join("")}</div>` : "";
+  const pts = POINTS.filter(P => at(P.id).some(inZone)).sort((a,b) => b.lat - a.lat);
+  const n = pts.reduce((s,P) => s + at(P.id).filter(inZone).length, 0);
+  const un = PEOPLE.filter(p => !p.pt && inZone(p));
+  const title = zoneFilter ? ZONE_LABEL[zoneFilter] : "ทุกโซน";
+  $("#unplaced").innerHTML = `<div class="ubar" style="${zoneFilter ? zc(zoneFilter) : "--zc:var(--fg)"}"><b>${esc(title)}</b><span>${pts.length} จุด · ${n} คน${un.length ? ` · ยังไม่ระบุจุด ${un.length} คน` : ""}</span></div>` +
+    pts.map(P => { const ps = at(P.id).filter(inZone);
+      return `<section class="ugrp" style="${zc(P.zone)}"><button class="uhd" data-pt="${P.id}"><span class="unum">${esc(P.num || "•")}</span><b>${esc(P.name)}</b><em>${ps.length} คน ›</em></button>
+        <div class="grid">${ps.map(cardHtml).join("")}</div></section>`; }).join("") +
+    (un.length ? `<section class="ugrp" style="--zc:var(--muted)"><div class="uhd"><span class="unum">?</span><b>ยังไม่ระบุจุดบนแผนที่</b><em>${un.length} คน</em></div><div class="grid">${un.map(cardHtml).join("")}</div></section>` : "");
+}
+function fitZone(){
+  if (!map) return;
+  const pts = POINTS.filter(P => !zoneFilter || ptMatches(P)).map(P => [P.lat, P.lng]);
+  if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(zoneFilter ? 0.5 : 0.08), {maxZoom:17});
 }
 
 /* ---------- Schematic ---------- */
@@ -1569,7 +1589,7 @@ document.addEventListener("click", e => {
     return; }
   const t = e.target.closest("[data-person],[data-pt],[data-close],[data-zone]");
   if (!t) return;
-  if (t.dataset.zone !== undefined){ const z = +t.dataset.zone; zoneFilter = zoneFilter === z ? 0 : z; renderAll(); return; }
+  if (t.dataset.zone !== undefined){ const z = +t.dataset.zone; zoneFilter = zoneFilter === z ? 0 : z; renderAll(); if (!$("#view-sat").hidden) fitZone(); return; }
   if (t.dataset.close !== undefined) return sheet.close();
   if (t.dataset.person) return showPerson(t.dataset.person);
   if (t.dataset.pt) return showPoint(t.dataset.pt);
