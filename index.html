@@ -686,17 +686,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --bg:#eef2f3; --surface:#ffffff; --fg:#13242b; --muted:#5a6e76; --line:#d2dcdf;
   --river:#2a7593; --river-2:#4f9cb7; --bridge:#7d8b90; --gold:#a87b14; --gold-soft:#f3e7c6; --route:#f2c230;
   --z1:#2a6fb0; --z2:#b0602a; --z3:#2f8a5c; --z4:#8a4bb0; --z5:#b03a5b; --z6:#8a6d12; --z7:#1f7a8c;
+  --t1:#1f63b5; --t1b:#e3eefb; --t1t:#0c3c74; --t2:#14866b; --t2b:#dff3ec; --t2t:#08503f; --t3:#b07a12; --t3b:#f8ecd2; --t3t:#5e3d05;
   --display:"Chakra Petch","Sarabun",system-ui,sans-serif;
   --body:"Sarabun",system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0b161a; --surface:#13232a; --fg:#e2edf0; --muted:#91a7af; --line:#24373e;
   --river:#2c86a8; --river-2:#5fb2cd; --bridge:#8fa0a6; --gold:#e2b64e; --gold-soft:#3a3019;
-  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; --z7:#5cc3d6; color-scheme:dark}}
+  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; --z7:#5cc3d6;
+  --t1:#7cb3f0; --t1b:#16304d; --t1t:#d6e7fb; --t2:#5fd0ad; --t2b:#123a31; --t2t:#d2f3e8; --t3:#e8b848; --t3b:#3d2f12; --t3t:#f7e6c0; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0b161a; --surface:#13232a; --fg:#e2edf0; --muted:#91a7af; --line:#24373e;
   --river:#2c86a8; --river-2:#5fb2cd; --bridge:#8fa0a6; --gold:#e2b64e; --gold-soft:#3a3019;
-  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; --z7:#5cc3d6; color-scheme:dark}
+  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; --z7:#5cc3d6;
+  --t1:#7cb3f0; --t1b:#16304d; --t1t:#d6e7fb; --t2:#5fd0ad; --t2b:#123a31; --t2t:#d2f3e8; --t3:#e8b848; --t3b:#3d2f12; --t3t:#f7e6c0; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
 .wrap{max-width:980px;margin:0 auto;padding-block:18px 48px;
@@ -713,9 +716,13 @@ h1{font-family:var(--display);font-size:clamp(22px,4.6vw,32px);line-height:1.15;
 .stat b{font:700 22px var(--display);font-variant-numeric:tabular-nums;display:block;line-height:1.1}
 .stat span{font-size:12px;color:var(--muted)}
 
-.tabs{display:flex;gap:2px;margin:14px 0 12px;border-bottom:1px solid var(--line);overflow-x:auto}
-.tab{font:600 15px var(--display);background:none;border:0;color:var(--muted);padding:8px 12px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
-.tab[aria-selected="true"]{color:var(--fg);border-color:var(--gold)}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 12px}
+.tab{--tc:var(--t1);--tb:var(--t1b);--tt:var(--t1t);font:600 15px/1.25 var(--display);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;color:var(--muted);padding:12px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;transition:background .15s,border-color .15s}
+.tab svg{width:26px;height:26px;stroke:var(--tc);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab:hover{border-color:var(--tc)}
+.tab[aria-selected="true"]{border-color:var(--tc);background:var(--tb);color:var(--tt);box-shadow:inset 0 -4px 0 var(--tc)}
+#tab-map{--tc:var(--t2);--tb:var(--t2b);--tt:var(--t2t)}
+#tab-list{--tc:var(--t3);--tb:var(--t3b);--tt:var(--t3t)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 .zones{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
@@ -835,9 +842,9 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
   <div class="stats" id="stats"></div>
 
   <div class="tabs" role="tablist">
-    <button class="tab" role="tab" id="tab-sat" aria-selected="true">แผนที่ดาวเทียม</button>
-    <button class="tab" role="tab" id="tab-map" aria-selected="false">ผังริมน้ำ</button>
-    <button class="tab" role="tab" id="tab-list" aria-selected="false">รายชื่อทั้งหมด</button>
+    <button class="tab" role="tab" id="tab-sat" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.7 10.7l3-3 3.6 3.6-3 3z"/><path d="M13.7 13.7l3-3 3.6 3.6-3 3z"/><path d="M9.5 12.2l2.3-2.3 2.3 2.3-2.3 2.3z"/><path d="M5 19a3 3 0 0 0 3 0"/><path d="M4 21a6 6 0 0 0 6-1"/></svg><span>แผนที่ดาวเทียม</span></button>
+    <button class="tab" role="tab" id="tab-map" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M12 19h4.5a3.5 3.5 0 0 0 0-7h-8a3.5 3.5 0 0 1 0-7H12"/></svg><span>ผังริมน้ำ</span></button>
+    <button class="tab" role="tab" id="tab-list" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/><path d="M21 21v-2a4 4 0 0 0-3-3.9"/></svg><span>รายชื่อทั้งหมด</span></button>
   </div>
 
   <div class="zones" id="zones"></div>
