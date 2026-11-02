@@ -753,30 +753,7 @@ h1{font-family:var(--display);font-size:clamp(22px,4.6vw,32px);line-height:1.15;
 .zlegend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin:4px 0 14px}
 .zlegend i{display:inline-block;width:14px;height:14px;border-radius:50%;border:3px solid var(--src1);vertical-align:-2px;margin-right:6px}
 .zlegend i.s2{border-color:var(--src2)}
-/* Overview poster */
-.poster{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1fr);gap:14px;margin-bottom:22px;padding:14px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
-.poster-title{grid-column:1/-1;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.poster-title b{font:700 18px var(--display)}
-.poster-title span{font-size:13px;color:var(--muted)}
-.pcol{display:flex;flex-direction:column;gap:10px;position:relative;z-index:3;min-width:0}
-.pmapwrap{position:relative;z-index:1;isolation:isolate;border-radius:12px;overflow:hidden;min-height:520px;background:#1d3540}
-#pmap{position:absolute;inset:0}
-#pmap .leaflet-tile-pane{filter:brightness(.82) saturate(.9)}
-.plines{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:visible}
-.pk{background:var(--bg);border:1.5px solid var(--zc);border-radius:12px;padding:8px 10px;display:grid;gap:6px;min-width:0}
-.pk-h{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;color:inherit;font:inherit;cursor:pointer;text-align:left}
-.pk-n{flex:none;min-width:30px;height:30px;border-radius:8px;background:var(--zc);color:#fff;font:700 13px/30px var(--display);text-align:center;padding:0 6px}
-.pk-n.nonum{border-radius:15px}
-.pk-h b{font:600 14px/1.25 var(--display);min-width:0}
-.pk-h em{margin-left:auto;font-style:normal;font-size:12px;color:var(--muted);white-space:nowrap}
-.pk-f{display:flex;flex-wrap:wrap;gap:4px}
-.pk-f button{background:none;border:0;padding:0;cursor:pointer;border-radius:50%}
-.pk-f img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2.5px solid var(--src1);display:block;background:var(--line)}
-.pk-f .s2 img{border-color:var(--src2)}
-.pk-names{font-size:12px;line-height:1.45;color:var(--muted)}
-.pm{min-width:30px;height:26px;padding:0 6px;border-radius:7px;background:var(--zc);color:#fff;border:2px solid #fff;font:700 13px/22px var(--display);text-align:center;box-shadow:0 2px 6px rgb(0 0 0 / .5);transform:translate(-50%,-50%);display:inline-block;white-space:nowrap}
-.pm.nonum{border-radius:13px}
-@media (max-width:820px){.poster{grid-template-columns:minmax(0,1fr)}.pmapwrap{order:-1;min-height:60vh}.poster-title{order:-2}.plines{display:none}}
+
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 .zones{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
@@ -931,14 +908,6 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
   <section id="view-zone" hidden>
     <div class="zsum" id="zsum"></div>
     <div class="zlegend"><span><i></i>อินฟลูเอนเซอร์ ศอ.จอส.พระราชทาน ภาค ๑</span><span><i class="s2"></i>อินฟลูเอนเซอร์ ศปก.พล.</span></div>
-    <div class="poster" id="poster">
-      <div class="poster-title"><b>ภาพรวมการวางกำลังอินฟลูเอนเซอร์</b><span>ฝั่งธนบุรีอยู่ซ้าย · ฝั่งพระนครอยู่ขวา · กดการ์ดหรือรูปเพื่อดูรายละเอียด</span></div>
-      <div class="pcol" id="pcol-w" data-side="w"></div>
-      <div class="pmapwrap" id="pmapwrap"><div id="pmap"></div></div>
-      <div class="pcol" id="pcol-e" data-side="e"></div>
-      <svg class="plines" id="plines" aria-hidden="true"></svg>
-    </div>
-    <h3 style="font:700 17px var(--display);margin:4px 0 10px">รายละเอียดแต่ละโซน</h3>
     <div id="zchart"></div>
   </section>
 
@@ -1325,60 +1294,6 @@ function renderZoneChart(){
     </section>` : "");
 }
 
-/* ---------- Overview poster ---------- */
-let pmap = null;
-const SYM = {L12:"อ", L13:"ท", L14:"72"};
-function pkHtml(P){
-  const ps = at(P.id);
-  return `<div class="pk" data-ptid="${P.id}" style="${zc(P.zone)}">
-    <button class="pk-h" data-pt="${P.id}"><span class="pk-n${P.num ? "" : " nonum"}">${P.num || SYM[P.id] || "•"}</span><b>${esc(P.name)}</b><em>${ps.length} คน</em></button>
-    <div class="pk-f">${ps.map(x => `<button class="${x.zone === 6 ? "s2" : ""}" data-person="${x.id}" title="${esc(x.name)}"><img src="${img(x)}" alt="${esc(x.name)}" loading="lazy"></button>`).join("")}</div>
-    <div class="pk-names">${ps.map(x => esc(shortName(x.name))).join(" · ")}</div>
-  </div>`;
-}
-function renderPoster(){
-  const byLat = (a, b) => b.lat - a.lat;
-  const vis = P => !zoneFilter || ptMatches(P);
-  $("#pcol-w").innerHTML = POINTS.filter(p => p.bank === "w" && vis(p)).sort(byLat).map(pkHtml).join("");
-  $("#pcol-e").innerHTML = POINTS.filter(p => p.bank === "e" && vis(p)).sort(byLat).map(pkHtml).join("");
-  if (pmap){ pmap.eachLayer(l => { if (l.options && l.options.pid) l.setOpacity(vis(pt(l.options.pid)) ? 1 : .25); }); requestAnimationFrame(drawLines); }
-}
-function initPoster(){
-  if (pmap || !window.L) return;
-  pmap = L.map("pmap", {zoomControl:true, attributionControl:true, scrollWheelZoom:false, zoomSnap:0.25});
-  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {maxZoom:19, attribution:"© Esri"}).addTo(pmap);
-  const route = [ROUTE_START.at, ...RIVER.slice(3, RIVER.length - 1)];
-  L.polyline(route, {color:"#ffffff", weight:8, opacity:.45}).addTo(pmap);
-  L.polyline(route, {color:getCss("--route"), weight:4, dashArray:"10 7"}).addTo(pmap);
-  [ROUTE_START, ROUTE_END].forEach(e => L.circleMarker(e.at, {radius:6, color:"#13242b", weight:2, fillColor:getCss("--route"), fillOpacity:1}).addTo(pmap));
-  POINTS.forEach(P => {
-    const mk = L.marker([P.lat, P.lng], {pid:P.id, icon:L.divIcon({className:"", html:`<span class="pm${P.num ? "" : " nonum"}" style="${zc(P.zone)}">${P.num || SYM[P.id] || "•"}</span>`, iconSize:[0,0]})}).addTo(pmap);
-    mk.on("click", () => showPoint(P.id));
-  });
-  const fit = () => pmap.fitBounds(L.latLngBounds(POINTS.map(p => [p.lat, p.lng])).pad(0.02), {padding:[18,18]});
-  pmap.whenReady(() => { fit(); drawLines(); });
-  pmap.on("move zoom resize", drawLines);
-  addEventListener("resize", () => { if (!$("#view-zone").hidden){ pmap.invalidateSize(); drawLines(); } });
-}
-function drawLines(){
-  const svg = $("#plines"); if (!pmap || !svg || matchMedia("(max-width:820px)").matches){ if (svg) svg.innerHTML = ""; return; }
-  const box = $("#poster").getBoundingClientRect(), mr = $("#pmapwrap").getBoundingClientRect();
-  let out = "";
-  document.querySelectorAll("#poster .pk").forEach(card => {
-    const P = pt(card.dataset.ptid), side = card.parentElement.dataset.side, r = card.getBoundingClientRect();
-    const p = pmap.latLngToContainerPoint([P.lat, P.lng]);
-    const x2 = mr.left - box.left + p.x, y2 = mr.top - box.top + p.y;
-    if (p.x < 0 || p.y < 0 || p.x > mr.width || p.y > mr.height) return;
-    const x1 = side === "w" ? r.right - box.left : r.left - box.left, y1 = r.top - box.top + 22;
-    const xe = side === "w" ? mr.left - box.left + 10 : mr.right - box.left - 10;
-    const d = `M${x1},${y1} H${xe} L${x2},${y2}`;
-    const col = getComputedStyle(card).getPropertyValue("--zc").trim() || "#fff";
-    out += `<path d="${d}" fill="none" stroke="#ffffff" stroke-opacity=".75" stroke-width="4.5" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="var(--z${P.zone})" stroke-width="2.2" stroke-linejoin="round"/><circle cx="${x1}" cy="${y1}" r="3.5" fill="var(--z${P.zone})"/>`;
-  });
-  svg.setAttribute("width", box.width); svg.setAttribute("height", box.height);
-  svg.innerHTML = out;
-}
-
 /* ---------- List ---------- */
 function cardHtml(p){
   const P = pt(p.pt);
@@ -1469,7 +1384,6 @@ const TABS = {sat:"#view-sat", map:"#view-map", list:"#view-list", zone:"#view-z
 function setTab(w){
   Object.entries(TABS).forEach(([k, sel]) => { $("#tab-" + k).setAttribute("aria-selected", k === w); $(sel).hidden = k !== w; });
   if (w === "sat" && map) setTimeout(() => map.invalidateSize(), 0);
-  if (w === "zone") setTimeout(() => { initPoster(); if (pmap){ pmap.invalidateSize(); pmap.fitBounds(L.latLngBounds(POINTS.map(p => [p.lat, p.lng])).pad(0.02), {padding:[18,18]}); drawLines(); } }, 0);
 }
 Object.keys(TABS).forEach(k => $("#tab-" + k).onclick = () => setTab(k));
 ["#q","#ftype","#fsort"].forEach(s => $(s).addEventListener("input", renderList));
@@ -1483,7 +1397,7 @@ $("#b-edit").onclick = e => { editing = !editing; e.currentTarget.setAttribute("
 $("#b-copycoords").onclick = e => { const ta = $("#coords");
   (navigator.clipboard?.writeText(ta.value) || Promise.reject()).then(() => e.target.textContent = "คัดลอกแล้ว").catch(() => ta.select()); };
 
-function renderAll(){ renderZones(); renderSchematic(); renderList(); renderUnplaced(); renderZoneChart(); renderPoster(); refreshMarkers(); }
+function renderAll(){ renderZones(); renderSchematic(); renderList(); renderUnplaced(); renderZoneChart(); refreshMarkers(); }
 renderStats(); initMap(); renderAll();
 
 /* ---------- ติดตั้งเป็นแอป + อัปเดตอัตโนมัติ (ทำงานเมื่อเปิดผ่าน GitHub Pages) ---------- */
