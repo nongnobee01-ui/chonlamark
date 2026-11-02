@@ -910,6 +910,27 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
 .tpp .tar2 i{font:700 12px/22px var(--display);font-style:normal;background:#ffe600;color:#1d1d1d;border:1.5px solid #333;border-radius:5px;text-align:center}
 .tpp .tar2 em{font:600 13.5px var(--display);font-style:normal;font-variant-numeric:tabular-nums}
 .tpp .tchk{font-size:12.5px;background:var(--gold-soft, #f4e6c2);color:var(--fg);border-radius:8px;padding:6px 10px;margin:8px 0}
+
+.brg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:6px}
+.brg-facts{display:flex;flex-wrap:wrap;gap:6px 16px;margin-bottom:10px;font-size:13px;color:var(--muted)}
+.brg-facts b{font:700 17px var(--display);color:var(--fg);margin-right:4px}
+.brg-scroll{overflow-x:auto;padding-bottom:6px}
+.brg-grid{display:grid;gap:8px;min-width:980px}
+.brg-bank{font:600 12px var(--display);color:var(--muted);text-align:center}
+.lane{display:grid;grid-template-columns:62px minmax(0,1fr);gap:8px;align-items:center}
+.lane>b{font:700 14px var(--display)}
+.lane-row{position:relative;display:flex;align-items:center;gap:0;background:var(--lc);border-radius:8px;padding:6px 8px 6px 24px;min-height:44px;clip-path:polygon(18px 0,100% 0,100% 100%,18px 100%,0 50%)}
+.bt{flex:none;display:grid;justify-items:center;gap:1px;font-size:11.5px;line-height:1.2;text-align:center;color:#1d1830;padding:0 2px}
+.bt i{display:block;width:30px;height:9px;border-radius:0 0 10px 10px;background:#8a5a12;border-top:3px solid #e2b04a}
+.bt.dang i{width:20px;height:7px}
+.bt.royal i{width:44px;height:11px;background:#c9961c;border-top-color:#ffe28a;box-shadow:0 0 0 2px #fff}
+.bt.royal span{font-weight:700}
+.bt.royal .st{color:#c00000;font-size:13px}
+.gap{flex:none;display:grid;justify-items:center;font-size:10px;color:#4a4560;min-width:var(--w,20px)}
+.gap::before{content:"";display:block;width:100%;border-top:1px dashed #6b6585;margin-bottom:2px}
+.brg-note{font-size:12px;color:var(--muted);margin:8px 0 0}
+
+.brg-h{font:700 19px var(--display);margin:16px 0 8px}
 </style>
 
 </head>
@@ -973,6 +994,12 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
   <div class="tlayers" id="tlayers"></div>
   <div class="tmapbox"><div id="tmap"></div><button class="tfit" id="tfit">ดูทั้งพื้นที่</button></div>
   <p class="tnote">สีพื้นที่และเส้นเขตตามแผนที่ ศอ.จอส.พระราชทาน ภาค ๑ (แผน ถปภ.) วางบนภาพดาวเทียมจริง · แตะรูปผู้บังคับหน่วยหรือเลขโซนเพื่อดูรายละเอียด</p>
+<h2 class="brg-h">การจัดขบวนเรือพยุหยาตราทางชลมารค</h2>
+<div class="brg" id="brg">
+  <div class="brg-facts"><span><b>52</b>ลำ เรือพระราชพิธี</span><span><b>5</b>ริ้ว 3 สาย</span><span><b>1,290</b>ม. ความยาว</span><span><b>90</b>ม. ความกว้าง</span><span><b>2,300</b>นาย กำลังพลประจำเรือ</span></div>
+  <div class="brg-scroll"><div class="brg-grid" id="brg-grid"></div></div>
+  <p class="brg-note">หัวขบวนอยู่ด้านซ้าย (ปลายลูกศร) ตามแผนต้นฉบับ · ★ เรือพระที่นั่ง · ตัวเลขระหว่างลำคือระยะห่างโดยประมาณตามแผน · เลื่อนซ้าย-ขวาเพื่อดูทั้งขบวน</p>
+</div>
   <h2>ผู้บังคับหน่วยแต่ละโซน</h2>
   <div class="tzg" id="tzg"></div>
   <h2>หมู่เรือถวายความปลอดภัย และ รพศ.3</h2>
@@ -1574,6 +1601,26 @@ const TPP_IMG = "tpp/";
   window.tppShow = () => { init(); setTimeout(() => { if (tmap) { tmap.invalidateSize(); if (!tzone) tmap.fitBounds(tbounds); } }, 0); };
 })();
 </script>
+<script>
+(function(){
+  const D = (n) => ({t:"d", n}), B = (n, r) => ({t:"b", n, r}), G = (m) => ({t:"g", m});
+  const dangs = (odd) => { const a = []; for (let i = odd ? 1 : 2; i <= (odd ? 21 : 22); i += 2) { a.push(D("ดั้ง " + i)); a.push(G(40)); } a.pop(); return a; };
+  const LANES = [
+    {k:"ริ้วที่ 1", c:"#f9c9cf", items:[...dangs(true), G(260), D("แซง 1"), G(80), D("แซง 3"), G(80), D("แซง 5")]},
+    {k:"ริ้วที่ 2", c:"#f9c9cf", items:[B("ทองขวานฟ้า"), G(40), B("เสือทยานชล"), G(210), B("อสุรวายุภักษ์"), G(110), B("กระบี่ปราบเมืองมาร"), G(110), B("พาลีรั้งทวีป"), G(110), B("ครุฑเหินเห็จ"), G(160), B("เอกไชยเหินหาว")]},
+    {k:"ริ้วที่ 3", c:"#c9dcf4", items:[B("อีเหลือง (กลองนอก)"), G(110), B("ตำรวจ 1"), G(180), B("ตำรวจ 2"), G(110), B("อนันตนาคราช", 1), G(110), B("แตงโม (กลองใน)"), G(70), B("สุพรรณหงส์", 2), G(80), B("อเนกชาติภุชงค์", 2), G(80), B("นารายณ์ทรงสุบรรณ ร.๙", 1), G(80), B("ตำรวจ 3"), G(80), D("แซง 7")]},
+    {k:"ริ้วที่ 4", c:"#f9c9cf", items:[B("ทองบ้าบิ่น"), G(40), B("เสือคำรณสินธุ์"), G(210), B("อสุรปักษี"), G(110), B("กระบี่ราญรอนราพณ์"), G(110), B("สุครีพครองเมือง"), G(110), B("ครุฑเตร็จไตรจักร"), G(160), B("เอกไชยหลาวทอง")]},
+    {k:"ริ้วที่ 5", c:"#f9c9cf", items:[...dangs(false), G(260), D("แซง 2"), G(80), D("แซง 4"), G(80), D("แซง 6")]}
+  ];
+  const e = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const item = x => x.t === "g" ? `<span class="gap" style="--w:${Math.max(18, Math.min(60, x.m / 4))}px">${x.m}</span>`
+    : `<span class="bt${x.t === "d" ? " dang" : ""}${x.r === 2 ? " royal" : ""}"><i></i><span>${x.r === 2 ? '<span class="st">★</span> ' : ""}${e(x.n)}</span></span>`;
+  document.getElementById("brg-grid").innerHTML = `<div class="brg-bank">ฝั่งธนบุรี</div>` +
+    LANES.map(l => `<div class="lane"><b>${l.k}</b><div class="lane-row" style="--lc:${l.c}">${l.items.map(item).join("")}</div></div>`).join("") +
+    `<div class="brg-bank">ฝั่งพระนคร</div>`;
+})();
+</script>
+
 
 
 </body>
