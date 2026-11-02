@@ -931,6 +931,26 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
 .brg-note{font-size:12px;color:var(--muted);margin:8px 0 0}
 
 .brg-h{font:700 19px var(--display);margin:16px 0 8px}
+
+.nv{display:grid;gap:10px}
+.nv-top{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.nv-top b.big{font:700 26px var(--display);color:#1f3f8f}
+.nv-top .cmdr{display:flex;gap:10px;align-items:center;margin-left:auto}
+.nv-top .cmdr img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2.5px solid #1f3f8f}
+.nv-top .cmdr span{font-size:12.5px;color:var(--muted);display:block}
+.nv-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px;align-items:start}
+.nv-c{background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--nc);border-radius:12px;padding:10px 12px;display:grid;gap:6px;min-width:0}
+.nv-c h3{margin:0;font:700 16px/1.3 var(--display);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.nv-c h3 em{margin-left:auto;font-style:normal;background:var(--nc);color:#fff;border-radius:99px;padding:0 10px;font-size:14px}
+.nv-c .ms{font-size:13px;color:var(--muted);margin:0}
+.nv-c table{width:100%;border-collapse:collapse;font-size:13.5px}
+.nv-c td{padding:2px 0;border-bottom:1px dashed var(--line)}
+.nv-c td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.nv-c td small{color:var(--muted)}
+.nv-c .ld{font-size:12.5px;color:var(--muted)}
+.nv-c .ld b{color:var(--fg);font-weight:600}
+.nv-tel{font:600 14px var(--display);font-variant-numeric:tabular-nums;user-select:all}
+.nv-cp{font:600 11.5px var(--body);border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:6px;padding:1px 8px;cursor:pointer;margin-left:6px}
 </style>
 
 </head>
@@ -1002,6 +1022,8 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
 </div>
   <h2>ผู้บังคับหน่วยแต่ละโซน</h2>
   <div class="tzg" id="tzg"></div>
+<h2 class="brg-h">การจัดกำลังถวายความปลอดภัยทางน้ำของกองทัพเรือ</h2>
+<div class="nv" id="nv"></div>
   <h2>หมู่เรือถวายความปลอดภัย และ รพศ.3</h2>
   <div class="tzc" style="--qc:var(--q1)" id="tnavy"></div>
   <h2>พื้นที่ประชาชนเฝ้ารับเสด็จฯ 21 พื้นที่</h2>
@@ -1620,6 +1642,41 @@ const TPP_IMG = "tpp/";
     `<div class="brg-bank">ฝั่งพระนคร</div>`;
 })();
 </script>
+<script>
+(function(){
+  const NV = {
+    total:97, cmdr:{name:"พล.ร.ต.สรายุธ สุขรมย์", pos:"ผบ.กลน.กร. (ผบ.หมวดเรือฯ)", tel:"096-889-9395", ph:"n1"},
+    groups:[
+      {n:1, c:"#d6a600", t:"ถปน.พระบาทสมเด็จพระเจ้าอยู่หัวฯ และสมเด็จพระนางเจ้าฯ พระบรมราชินี", lead:"ผบ.หมู่: ผบ.มว.เรือที่ 3 กลน. · รอง: เสธ.มว.เรือที่ 3", who:{name:"น.อ.รวีกฤษฎิ์ ล้อเลิศวิไล", tel:"091-716-4166"},
+       boats:[["เรือ รตล.",3],["เรือ จล.",4,"จัดเพิ่มขึ้น 3 ลำ"],["เรือ รน.",4],["เรือ จท.",3],["เรือ ขส.ทร.",2,"เรือพระที่นั่งฉุกเฉิน"],["เรือวชิรพยาบาล",1,"เรือพยาบาล"]], sum:17},
+      {n:2, c:"#2a9fd6", t:"ถปน.พระบรมวงศานุวงศ์", lead:"ผบ.หมู่: รอง เสธ.กลน.(1) · รอง: นงป.กลน.", who:{name:"น.อ.วันชาติ พงษ์หัสบรรณ์", tel:"063-524-7895"},
+       boats:[["เรือ รตล.",2],["เรือ จล.",2],["เรือ จท.",1],["เรือ ขส.ทร.",2,"เรือพระที่นั่งฉุกเฉิน"],["เรือวชิรพยาบาล",1,"เรือพยาบาล"]], sum:8},
+      {n:3, c:"#7a5bb0", t:"เรือยาง ถปน.เรือพระที่นั่ง", lead:"ผบ.หมู่: รอง ผบ.มว.เรือที่ 3 · รอง: ประจำ มว.เรือที่ 3 กลน.", who:{name:"น.อ.ธานินทร์ สุพรรณพงศ์", tel:"096-953-9359"},
+       boats:[["เรือยาง ถปน.เรือพระที่นั่งสุพรรณหงส์",9],["เรือยาง ถปน.เรือพระที่นั่งอเนกชาติภุชงค์",9],["เรือยางประจำตอม่อสะพานสมเด็จพระปิ่นเกล้า",4]], sum:22},
+      {n:4, c:"#e07a12", t:"จัดระเบียบการจราจรทางน้ำ และ รปภ.พื้นที่ท่าเรือ", ms:"ตั้งแต่สะพานกรุงธนบุรี ถึง สะพานพระปกเกล้า", lead:"ผบ.หมู่: รอง เสธ.กลน. · รอง: หน.กบ.กลน.",
+       boats:[["ควบคุมจราจร ด้านเหนือสะพานกรุงธนบุรี",5],["ควบคุมจราจร คลองบางกอกน้อย",3],["ควบคุมจราจร คลองมอญ",1],["ควบคุมจราจร คลองบางกอกใหญ่",2],["ควบคุมจราจร ด้านใต้สะพานพระปกเกล้า",5],["เรือยางวางกำลังตามจุด ช่วยเหลือผู้ประสบภัย",23],["เรือยางตรวจวัตถุลอยน้ำ",6,"ชุดประดาน้ำ"],["เรือพยาบาลช่วยเหลือผู้ประสบภัย",1],["เรือสำรอง เจ้าท่า",2],["เรือ รตล. สนับสนุน ทม.รอ.",2,"ทกย."]], sum:48},
+      {n:5, c:"#c0263b", t:"ตรวจสอบและเก็บกู้วัตถุใต้น้ำ", ms:"ขึ้นควบคุมทางยุทธการ · ตรวจพื้นที่ในแม่น้ำเจ้าพระยา สะพานกรุงธนบุรี ถึง สะพานพระปกเกล้า (2 เรือ กทต.) / อุปกรณ์ Side Scan สพ.ทร.", lead:"ผบ.หมู่: รอง เสธ.กทบ.",
+       boats:[["เรือ กทต.",2]], sum:2}
+    ],
+    contacts:[{name:"น.อ.ธานินทร์ สุพรรณพงศ์", pos:"รอง ผบ.มว.เรือที่ 3 กลน. / ผบ.หมู่เรือ ถปน.ที่ 3 · นายทหารประสานงาน", tel:"096-953-9359"},{name:"จ.อ.บพิธ พลชาติ", pos:"ผค.เรือยาง V1 · พลขับ", tel:"091-881-8358"}]
+  };
+  const e = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const tel = t => `<span class="nv-tel">${e(t)}</span><button class="nv-cp" data-nvcopy="${t.replace(/\D/g,"")}">คัดลอก</button>`;
+  const ph = (window.TPP_PH && TPP_PH[NV.cmdr.ph]) || ((window.TPP_IMG ?? "tpp/") + NV.cmdr.ph + ".jpg");
+  document.getElementById("nv").innerHTML =
+    `<div class="nv-top"><span>หมวดเรือเฉพาะกิจถวายความปลอดภัยทางน้ำ ขบวนพยุหยาตราทางชลมารค</span><span>รวมทั้งสิ้น <b class="big">${NV.total}</b> ลำ</span>
+      <div class="cmdr"><img src="${ph}" alt=""><div><b>${e(NV.cmdr.name)}</b><span>${e(NV.cmdr.pos)}</span>${tel(NV.cmdr.tel)}</div></div></div>
+     <div class="nv-g">${NV.groups.map(g => `<div class="nv-c" style="--nc:${g.c}"><h3>หมู่เรือที่ ${g.n}<em>${g.sum} ลำ</em></h3>
+       <p class="ms"><b style="color:var(--fg)">${e(g.t)}</b>${g.ms ? "<br>" + e(g.ms) : ""}</p>
+       <table>${g.boats.map(b => `<tr><td>${e(b[0])}${b[2] ? ` <small>(${e(b[2])})</small>` : ""}</td><td>${b[1]} ลำ</td></tr>`).join("")}</table>
+       <div class="ld">${e(g.lead)}${g.who ? `<br><b>${e(g.who.name)}</b> ${tel(g.who.tel)}` : ""}</div></div>`).join("")}
+       <div class="nv-c" style="--nc:#1f3f8f"><h3>ผู้ประสานงาน</h3>${NV.contacts.map(c => `<div class="ld"><b>${e(c.name)}</b><br>${e(c.pos)}<br>${tel(c.tel)}</div>`).join("")}</div></div>`;
+  document.addEventListener("click", ev => { const c = ev.target.closest("[data-nvcopy]"); if (!c) return;
+    (navigator.clipboard?.writeText(c.dataset.nvcopy) || Promise.reject()).then(() => { c.textContent = "คัดลอกแล้ว"; setTimeout(() => c.textContent = "คัดลอก", 1400); })
+    .catch(() => { const r = document.createRange(); r.selectNodeContents(c.previousElementSibling); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }); });
+})();
+</script>
+
 
 
 
