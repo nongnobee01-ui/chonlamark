@@ -909,6 +909,12 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
 .tpp .tar2{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:14px}
 .tpp .tar2 i{font:700 12px/22px var(--display);font-style:normal;background:#ffe600;color:#1d1d1d;border:1.5px solid #333;border-radius:5px;text-align:center}
 .tpp .tar2 em{font:600 13.5px var(--display);font-style:normal;font-variant-numeric:tabular-nums}
+.tpp .tar2{grid-template-columns:30px 84px minmax(0,1fr) auto!important;align-items:center}
+.tpp .tar2 img{width:84px;height:46px;object-fit:cover;border-radius:6px;background:var(--line);cursor:zoom-in}
+.tpp .tal{gap:6px!important}
+.rst{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}.rst th,.rst td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:center}.rst th{font:700 13px var(--display);color:var(--muted)}.rst .tot td{font-weight:700}.rst .tot td:last-child{color:#c0263b}
+.rimg{display:grid;gap:4px;text-decoration:none;color:var(--muted);font-size:12.5px}.rimg img{width:100%;border-radius:8px;border:1px solid var(--line)}
+.aimgv{position:fixed;inset:0;z-index:9999;background:rgb(0 0 0 / .85);display:grid;place-items:center;padding:16px}.aimgv img{max-width:100%;max-height:85vh;border-radius:8px}.aimgv b{color:#fff;font:600 15px var(--display);margin-top:8px;text-align:center}
 .tpp .tchk{font-size:12.5px;background:var(--gold-soft, #f4e6c2);color:var(--fg);border-radius:8px;padding:6px 10px;margin:8px 0}
 
 .brg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:6px}
@@ -1029,6 +1035,11 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
   <h2>พื้นที่ประชาชนเฝ้ารับเสด็จฯ 21 พื้นที่</h2>
   <div id="tareasum"></div>
   <div class="tzg" id="tareas"></div>
+  <h2>ร้านอาหารที่สามารถรองรับประชาชนได้</h2>
+  <div class="tzc" style="--qc:#a87b14"><table class="rst"><tr><th>โซน</th><th>ร้านอาหาร</th><th>รองรับได้ (คน)</th></tr>
+  <tr><td>1</td><td>14</td><td>1,280</td></tr><tr><td>2</td><td>33</td><td>3,267</td></tr><tr><td>3</td><td>2</td><td>215</td></tr><tr><td>4</td><td>13</td><td>1,200</td></tr><tr><td>5</td><td>1</td><td>15</td></tr>
+  <tr class="tot"><td>รวม</td><td>63</td><td>5,977</td></tr></table>
+  <a class="rimg" href="tpp/rest-list.jpg" target="_blank" rel="noopener"><img src="tpp/rest-list.jpg" alt="รายชื่อร้านอาหารแต่ละโซน" loading="lazy"><span>แตะเพื่อเปิดรายชื่อร้านอาหารแต่ละโซน (ภาพจากเอกสาร)</span></a></div>
 </div>
   </section>
 
@@ -1571,7 +1582,7 @@ const TPP_IMG = "tpp/";
     const tot = TPP.areas.reduce((s,a) => s + a.count, 0);
     $t("#tareasum").innerHTML = `<div class="tchk">รวมตามรายการพื้นที่ ${nf(tot)} คน · เอกสารระบุยอดรวม ${nf(TPP.docTotal)} คน (ไม่ตรงกัน ควรตรวจสอบกับหน่วย)</div>`;
     $t("#tareas").innerHTML = zs.map(z => { const list = TPP.areas.filter(a => a.z === z.z);
-      return `<div class="tzc" style="${qc(z.z)}"><h3><span class="zn">โซน ${z.z}</span>${e(z.unit)}<small>${nf(list.reduce((s,a)=>s+a.count,0))} คน</small></h3><div class="tal">${list.map(a => `<div class="tar2"><i>${a.n}</i><span>${e(a.name)}</span><em>${nf(a.count)}</em></div>`).join("")}</div></div>`; }).join("");
+      return `<div class="tzc" style="${qc(z.z)}"><h3><span class="zn">โซน ${z.z}</span>${e(z.unit)}<small>${nf(list.reduce((s,a)=>s+a.count,0))} คน</small></h3><div class="tal">${list.map(a => `<div class="tar2"><i>${a.n}</i><img src="${(window.TPP_PH && TPP_PH["a"+a.n]) || TPP_IMG + "a" + a.n + ".jpg"}" alt="" loading="lazy" data-aimg="${a.n}" data-acap="${e(a.n + ". " + a.name)}"><span>${e(a.name)}</span><em>${nf(a.count)}</em></div>`).join("")}</div></div>`; }).join("");
   }
   function lbtns(){ $t("#tlayers").innerHTML = LAYERS.map(([k,l]) => `<button class="tl" data-tl="${k}" aria-pressed="${!!(tmap && layers[k] && tmap.hasLayer(layers[k]))}">${l}</button>`).join(""); }
   function init(){
@@ -1616,6 +1627,7 @@ const TPP_IMG = "tpp/";
   document.addEventListener("click", ev => {
     const z = ev.target.closest("[data-tz]"); if (z) { focusZone(+z.dataset.tz); return; }
     const l = ev.target.closest("[data-tl]"); if (l && tmap) { const g = layers[l.dataset.tl]; tmap.hasLayer(g) ? tmap.removeLayer(g) : g.addTo(tmap); lbtns(); return; }
+    const ai = ev.target.closest("[data-aimg]"); if (ai) { const v = document.createElement("div"); v.className = "aimgv"; v.innerHTML = `<div style="display:grid;justify-items:center"><img src="${ai.src}" alt=""><b>${ai.dataset.acap}</b></div>`; v.onclick = () => v.remove(); document.body.appendChild(v); return; }
     const c = ev.target.closest("[data-tcopy]"); if (c) { (navigator.clipboard?.writeText(c.dataset.tcopy) || Promise.reject()).then(() => { c.textContent = "คัดลอกแล้ว"; setTimeout(() => c.textContent = "คัดลอก", 1400); }).catch(() => { const r = document.createRange(); r.selectNodeContents(c.previousElementSibling); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }); }
   });
   $t("#tfit").onclick = () => { tzone = 0; cards(); if (tmap) tmap.fitBounds(tbounds); };
