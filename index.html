@@ -854,6 +854,16 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
 .muted{color:var(--muted)}
 .grp{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:6px}
 .grp b{font-family:var(--display)}
+.gorg{margin:0;font-size:13.5px;background:var(--gold-soft);border-radius:8px;padding:6px 10px}
+.gorg span{display:block;font:600 11.5px var(--display);color:var(--muted);letter-spacing:.05em}
+.gsplit{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.gsplit b{font:700 17px var(--display);color:var(--fg)}
+.gfac summary{cursor:pointer;font:600 13.5px var(--display);color:var(--river)}
+.gfac table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+.gfac td{padding:3px 4px;border-bottom:1px dashed var(--line);vertical-align:top}
+.gfac td:last-child{text-align:right;font:700 14px var(--display);font-variant-numeric:tabular-nums}
+.gfac td:first-child{color:var(--muted);width:24px}
+.gfac small{display:block;color:var(--muted);font-size:12px}
 @media (prefers-reduced-motion:no-preference){dialog[open]{animation:up .18s ease-out}@keyframes up{from{transform:translateY(14px);opacity:.6}}}
 @media (max-width:480px){.pt-name{font-size:14px}.faces img{width:26px;height:26px}.map,.banks{column-gap:6px;grid-template-columns:1fr 30px 1fr}.map::before{width:30px}header .crest{width:46px}.mk,.mk img{width:40px;height:40px}}
 
@@ -1318,11 +1328,11 @@ const PEOPLE = [
 
 /* นักเรียน/นักศึกษา เข้าร่วมรับเสด็จฯ (ส่งลงที่ท่าช้าง กลับ 17.00) */
 const GROUPS = [
-  {pt:"L13",name:"จุฬาลงกรณ์มหาวิทยาลัย",count:181,coord:[T("ว่าที่ ร.ต.วิทวัส ศรีโนนยางค์","08 1262 3181")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 5 คัน",
+  {pt:"L13",name:"จุฬาลงกรณ์มหาวิทยาลัย",count:182,origin:"เข้าถึงอาจารย์ที่สอนในคณะอักษรศาสตร์ ทัศนคติดี และสอนติดตัวให้นิสิตช่วยประชาสัมพันธ์",split:[["นิสิตและนักเรียน",161],["บุคลากรและเจ้าหน้าที่",21]],fac:[["อักษรศาสตร์",53,"นิสิต 45, บุคลากร 8"],["วิทยาศาสตร์",35,"นิสิตทั้งหมด"],["ครุศาสตร์",30,"นิสิตทั้งหมด"],["พาณิชยศาสตร์และการบัญชี",12,"นิสิต 11, จนท. 1"],["นิติศาสตร์",12,"นิสิต 11, จนท. 1"],["ศิลปกรรมศาสตร์",9,"นิสิต 7, จนท. 2"],["สำนักบริหารกิจการนิสิต (สนบ.)",7,"จนท. ทั้งหมด"],["พยาบาลศาสตร์",7,"นิสิต ป.โท"],["วิทยาลัยสหศาสตร์บูรณาการฯ",3,"นิสิต ป.โท"],["วิทยาศาสตร์การกีฬา",2,"นิสิต"],["รัฐศาสตร์",2,"นิสิต"],["สัตวแพทยศาสตร์",2,"นิสิต"],["ทันตแพทยศาสตร์",2,"จนท. ทั้งหมด"],["จิตวิทยา",1,"นิสิต"],["แพทยศาสตร์",1,"นิสิต"],["เศรษฐศาสตร์",1,"นิสิต"],["สถาปัตยกรรมศาสตร์",1,"นิสิต"],["สหเวชศาสตร์",1,"นิสิต"],["รร.สาธิตจุฬาฯ (มัธยม)",1,"นักเรียน"]],coord:[T("ว่าที่ ร.ต.วิทวัส ศรีโนนยางค์","08 1262 3181")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 5 คัน",
    pickup:"ลานจอดรถข้างหอประชุมใหญ่ จุฬาฯ",pickupTime:"13.00",pickupMap:"https://maps.app.goo.gl/hZkUaNX3JUwJzDEn8",ret:"17.00",guide:C_JEERA},
-  {pt:"L13",name:"สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง",count:81,coord:[T("ร.ท.นราธรรม ถ้ำสุวรรณ","06 3669 9197"),T("ดร.ทรงศิริ พันธุเสวี","08 6708 5555")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 2 คัน",
+  {pt:"L13",origin:"คณบดีคณะสถาปัตยกรรมศาสตร์เป็น จอส.904 ขอความช่วยเหลือช่วงน้ำท่วม จึงติดต่อประสานกันต่อเนื่อง",name:"สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง",count:81,coord:[T("ร.ท.นราธรรม ถ้ำสุวรรณ","06 3669 9197"),T("ดร.ทรงศิริ พันธุเสวี","08 6708 5555")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 2 คัน",
    pickup:"อาคารสำนักงานอธิการบดี",pickupTime:"12.30",pickupMap:"https://maps.app.goo.gl/HaswjdgfMwnuZJPc8",ret:"17.00",guide:C_JEERA},
-  {pt:"L13",name:"มหาวิทยาลัยธรรมศาสตร์",count:60,coord:[T("ร.ท.ภูเมธ ชาติยานนท์","08 3245 3552")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 2 คัน",
+  {pt:"L13",name:"มหาวิทยาลัยธรรมศาสตร์",count:60,origin:"ศิษย์เก่าที่เป็น จอส.904 ช่วยประชาสัมพันธ์",coord:[T("ร.ท.ภูเมธ ชาติยานนท์","08 3245 3552")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 2 คัน",
    pickup:"จุดจอดรถริมสระน้ำ อาคารสำนักงานอธิการบดี",pickupTime:"10.30",pickupMap:"https://maps.app.goo.gl/Usa36NNt97QCY2xR6",ret:"17.00",guide:C_JEERA}
 ];
 /* ===================== จบส่วนข้อมูล ===================== */
@@ -1362,7 +1372,7 @@ function renderStats(){
     <div class="stat"><b>${placed}</b><span>ระบุจุดแล้ว</span></div>
     <div class="stat"><b>${POINTS.length}</b><span>จุดริมแม่น้ำ</span></div>
     <div class="stat"><b>${short(total)}</b><span>ผู้ติดตามรวม</span></div>
-    <div class="stat"><b>${GROUPS.reduce((s,g)=>s+g.count,0)}</b><span>นักเรียน/นักศึกษา</span></div>`;
+    <div class="stat" data-pt="L13" style="cursor:pointer"><b>${GROUPS.reduce((s,g)=>s+g.count,0)}</b><span>นักเรียน/นักศึกษา ›</span></div>`;
 }
 function renderZones(){
   const btn = (z, label) => `<button class="zbtn" data-zone="${z}" aria-pressed="${zoneFilter===z}" style="${z?zc(z):""}">${z?'<span class="dot"></span>':""}${label}</button>`;
@@ -1510,6 +1520,9 @@ function showPoint(id){
     <div class="grid">${ps.map(cardHtml).join("")}</div>
     ${gs.length ? `<p class="sec">นักเรียน/นักศึกษาเข้าร่วมรับเสด็จฯ ${gs.reduce((s,g)=>s+g.count,0)} คน</p>
       ${gs.map(g => `<div class="grp"><b>${esc(g.name)} · ${g.count} ราย</b>
+        ${g.origin ? `<p class="gorg"><span>ที่มา</span>${esc(g.origin)}</p>` : ""}
+        ${g.split ? `<div class="gsplit">${g.split.map(([l,n]) => `<span><b>${n}</b> ${esc(l)}</span>`).join("")}</div>` : ""}
+        ${g.fac ? `<details class="gfac"><summary>แยกตามคณะ / หน่วยงาน (${g.fac.length})</summary><table>${g.fac.map(([f,n,d],i) => `<tr><td>${i+1}.</td><td>${esc(f)}<small>${esc(d)}</small></td><td>${n}</td></tr>`).join("")}</table></details>` : ""}
         <dl class="kv">
           <dt>ผู้ประสานงานสถานศึกษา</dt><dd>${g.coord.map(telHtml).join("<br>")}</dd>
           <dt>ข้อมูลรถ</dt><dd>${esc(g.car)}</dd>
