@@ -957,6 +957,12 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
 .nv-c .ld b{color:var(--fg);font-weight:600}
 .nv-tel{font:600 14px var(--display);font-variant-numeric:tabular-nums;user-select:all}
 .nv-cp{font:600 11.5px var(--body);border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:6px;padding:1px 8px;cursor:pointer;margin-left:6px}
+.nv-h3{font:700 16px var(--display);margin:14px 0 8px}
+.nv-mv{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+.nv-mv a{display:grid;gap:4px;text-decoration:none;color:var(--muted);font-size:12.5px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px}
+.nv-mv img{width:100%;border-radius:8px;display:block}
+.nv-tl{width:100%;border-collapse:collapse;font-size:13.5px}.nv-tl td{padding:4px 4px;border-bottom:1px dashed var(--line);vertical-align:top}.nv-tl td:first-child{font:700 13.5px var(--display);color:#1f3f8f;white-space:nowrap;padding-right:10px}
+.nv-ol{margin:0;padding-left:20px;font-size:13.5px;line-height:1.6}
 </style>
 
 </head>
@@ -1030,6 +1036,18 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
   <div class="tzg" id="tzg"></div>
 <h2 class="brg-h">การจัดกำลังถวายความปลอดภัยทางน้ำของกองทัพเรือ</h2>
 <div class="nv" id="nv"></div>
+  <h3 class="nv-h3">ผังการเคลื่อนย้ายหมู่เรือ</h3>
+  <div class="nv-mv">
+    <a href="tpp/move12.jpg" target="_blank" rel="noopener"><img src="tpp/move12.jpg" alt="ผังการเคลื่อนย้ายหมู่ 1–2" loading="lazy"><span>ผังการเคลื่อนย้ายหมู่ 1–2 · แตะเพื่อเปิดภาพเต็ม</span></a>
+    <a href="tpp/move3.jpg" target="_blank" rel="noopener"><img src="tpp/move3.jpg" alt="ผังการเคลื่อนย้ายหมู่ 3" loading="lazy"><span>ผังการเคลื่อนย้ายหมู่ 3 (เรือยาง V1–V18) · แตะเพื่อเปิดภาพเต็ม</span></a>
+  </div>
+  <div class="nv-g" style="margin-top:10px">
+    <div class="nv-c" style="--nc:#1f3f8f"><h3>TimeLine การปฏิบัติ TM01</h3>
+      <table class="nv-tl"><tr><td>14.00</td><td>พักคอย ณ ห้องพักคอย</td></tr><tr><td>14.30</td><td>ออกจากที่พักเดินทางไปขึ้นเรือนาวา01 บริเวณท่าเรือ</td></tr><tr><td>14.45</td><td>เรือนาวา01 ออกจากท่าเข้าประจำตำแหน่ง</td></tr><tr><td>เรือนาวา01 ถึงหอประชุมกองทัพเรือ</td><td>เรือยางมารับ ผบช. เพื่อไปส่งที่ท่ายายเผือก โดยมี ผบ.พล.1 รอ. รอรับที่ท่า</td></tr></table>
+      <p class="ms">ตารางในสไลด์ต้นฉบับมีข้อความต่อจากนี้แต่ถูกตัดขอบ</p></div>
+    <div class="nv-c" style="--nc:#1f3f8f"><h3>เรือ นาวา01</h3><ol class="nv-ol"><li>TM 01</li><li>TM 011</li><li>พล.ท.สุทธิชัย ศรลัมพ์</li><li>ผบ.ฉก.ทม.รอ.904</li><li>พล.ต.ธวัชชัย วรรณดิลก</li><li>รอง เสธ.กลน.</li><li>น.อ.พลัฏฐ์ อุทธา</li></ol></div>
+    <div class="nv-c" style="--nc:#1f3f8f"><h3>เรือ นาวา02</h3><ol class="nv-ol"><li>พล.ต.พงศ์พิสิทธ์ มีสูงเนิน</li><li>รอง ผอ.กขว.ฉก.ทม.รอ.904</li><li>นตต.ศปก.พล.1 รอ.</li><li>นตต.ศปก.พล.ร.2 รอ.</li><li>นตต.ศปก.พล.ม.2 รอ.</li><li>นตต.ศปก.อย.</li><li>นตต.ศปก.นย.</li><li>พ.อ.ธภัทร พันธุ์แก้ว</li></ol></div>
+  </div>
   <h2>หมู่เรือถวายความปลอดภัย และ รพศ.3</h2>
   <div class="tzc" style="--qc:var(--q1)" id="tnavy"></div>
   <h2>พื้นที่ประชาชนเฝ้ารับเสด็จฯ 21 พื้นที่</h2>
