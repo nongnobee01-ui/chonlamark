@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>อินฟลูฯ ชลมารค ภาค ๑</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -803,6 +809,8 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
 @media (max-width:480px){.pt-name{font-size:14px}.faces img{width:26px;height:26px}.map,.banks{column-gap:6px;grid-template-columns:1fr 30px 1fr}.map::before{width:30px}header .crest{width:46px}.mk,.mk img{width:40px;height:40px}}
 </style>
 
+</head>
+<body>
 <div class="wrap">
   <header>
     <img class="crest" src="logo.png" alt="ตรากองทัพภาคที่ 1">
@@ -1148,14 +1156,15 @@ function initMap(){
     markers[P.id] = m;
   });
   map.on("zoomend", () => {
-    const show = map.getZoom() >= 15;
+    const show = map.getZoom() >= 16;
     Object.values(markers).forEach(m => { const t = m.getTooltip(); if (t) show ? m.openTooltip() : m.closeTooltip(); });
     if (riverFallback) riverFallback.setStyle({weight: riverPx()});
   });
   fitAll();
+  map.fire("zoomend");
 }
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || "#f2c230"; }
-function fitAll(){ if (map) map.fitBounds(L.latLngBounds(POINTS.map(p => [p.lat, p.lng])).pad(0.12)); }
+function fitAll(){ if (map) map.fitBounds(L.latLngBounds([...POINTS.map(p => [p.lat, p.lng]), ROUTE_START.at]).pad(0.03), {padding:[20,20]}); }
 function riverPx(){ const mpp = 156543.03 * Math.cos(13.76 * Math.PI/180) / Math.pow(2, map.getZoom()); return Math.max(6, 260 / mpp); }
 function showFallback(){
   $("#notice").hidden = false;
@@ -1297,3 +1306,6 @@ $("#b-copycoords").onclick = e => { const ta = $("#coords");
 function renderAll(){ renderZones(); renderSchematic(); renderList(); renderUnplaced(); refreshMarkers(); }
 renderStats(); initMap(); renderAll();
 </script>
+
+</body>
+</html>
