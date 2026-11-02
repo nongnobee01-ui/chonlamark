@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#13242b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ชลมารค ทภ.1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>อินฟลูฯ ชลมารค ภาค ๑</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -677,25 +685,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
 :root{
   --bg:#eef2f3; --surface:#ffffff; --fg:#13242b; --muted:#5a6e76; --line:#d2dcdf;
   --river:#2a7593; --river-2:#4f9cb7; --bridge:#7d8b90; --gold:#a87b14; --gold-soft:#f3e7c6; --route:#f2c230;
-  --z1:#2a6fb0; --z2:#b0602a; --z3:#2f8a5c; --z4:#8a4bb0; --z5:#b03a5b; --z6:#8a6d12;
+  --z1:#2a6fb0; --z2:#b0602a; --z3:#2f8a5c; --z4:#8a4bb0; --z5:#b03a5b; --z6:#8a6d12; --z7:#1f7a8c;
   --display:"Chakra Petch","Sarabun",system-ui,sans-serif;
   --body:"Sarabun",system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0b161a; --surface:#13232a; --fg:#e2edf0; --muted:#91a7af; --line:#24373e;
   --river:#2c86a8; --river-2:#5fb2cd; --bridge:#8fa0a6; --gold:#e2b64e; --gold-soft:#3a3019;
-  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; color-scheme:dark}}
+  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; --z7:#5cc3d6; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0b161a; --surface:#13232a; --fg:#e2edf0; --muted:#91a7af; --line:#24373e;
   --river:#2c86a8; --river-2:#5fb2cd; --bridge:#8fa0a6; --gold:#e2b64e; --gold-soft:#3a3019;
-  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; color-scheme:dark}
+  --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; --z7:#5cc3d6; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
 .wrap{max-width:980px;margin:0 auto;padding-block:18px 48px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header{display:flex;gap:14px;align-items:center;margin-bottom:12px}
 header .crest{width:58px;height:auto;flex:none}
-header>div{min-width:0;display:grid;gap:2px}
+header>div{min-width:0;display:grid;gap:2px;flex:1}
+.install{flex:none;align-self:center;font:600 14px var(--display);background:var(--fg);color:var(--bg);border:0;border-radius:10px;padding:8px 14px;cursor:pointer}
+.ios-hint{font-size:13px;background:var(--gold-soft);border-radius:10px;padding:8px 12px;margin:0 0 10px}
 .eyebrow{font:600 12px var(--display);letter-spacing:.1em;color:var(--gold)}
 h1{font-family:var(--display);font-size:clamp(22px,4.6vw,32px);line-height:1.15;margin:0;text-wrap:balance}
 .sub{color:var(--muted);margin:0}
@@ -819,7 +829,9 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
       <h1>อินฟลูเอนเซอร์ตามเส้นทางชลมารค</h1>
       <p class="sub">ขบวนพยุหยาตราทางชลมารค ท่าวาสุกรี ถึง วัดอรุณราชวราราม</p>
     </div>
+    <button class="install" id="b-install" hidden>ติดตั้งแอป</button>
   </header>
+  <p class="ios-hint" id="ios-hint" hidden>ติดตั้งบน iPhone: กดปุ่มแชร์ของ Safari แล้วเลือก "เพิ่มไปยังหน้าจอโฮม"</p>
   <div class="stats" id="stats"></div>
 
   <div class="tabs" role="tablist">
@@ -875,7 +887,8 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
    - กลุ่ม ทภ.1 (zone 6): ตาราง "ข้อมูล Influencer หน่วยทหาร / พลเรือน" และ "นักเรียน/นักศึกษา เข้าร่วมรับเสด็จฯ"
    POINTS: lat/lng ตรวจกับภาพดาวเทียม Esri แล้ว (ปรับได้ด้วยปุ่ม "ปรับตำแหน่งจุด")
    bank "w" = ฝั่งธนบุรี, "e" = ฝั่งพระนคร · bridge/pair ใช้กับผังริมน้ำ */
-const ZONE_LABEL = {1:"โซน 1",2:"โซน 2",3:"โซน 3",4:"โซน 4",5:"โซน 5",6:"กลุ่ม ทภ.1"};
+/* เพิ่มโซนใหม่: ใส่เลขและชื่อที่นี่ แล้วใส่ zone เลขนั้นให้คน/จุด (สี --z7 เตรียมไว้ให้ ถปภ.) */
+const ZONE_LABEL = {1:"โซน 1",2:"โซน 2",3:"โซน 3",4:"โซน 4",5:"โซน 5",6:"กลุ่ม ทภ.1",7:"ถปภ."};
 const POINTS = [
   {id:"L1",  zone:1, bank:"e", name:"วัดราชาธิวาส", lat:13.7763, lng:100.5024},
   {id:"L2",  zone:1, bank:"e", name:"วัดเทวราชกุญชร", lat:13.7722, lng:100.5008},
@@ -1123,7 +1136,7 @@ function renderStats(){
 }
 function renderZones(){
   const btn = (z, label) => `<button class="zbtn" data-zone="${z}" aria-pressed="${zoneFilter===z}" style="${z?zc(z):""}">${z?'<span class="dot"></span>':""}${label}</button>`;
-  $("#zones").innerHTML = btn(0,"ทั้งหมด") + [1,2,3,4,5,6].map(z => btn(z, `${ZONE_LABEL[z]} · ${PEOPLE.filter(p=>p.zone===z).length}`)).join("");
+  $("#zones").innerHTML = btn(0,"ทั้งหมด") + Object.keys(ZONE_LABEL).map(Number).filter(z => PEOPLE.some(p => p.zone === z) || POINTS.some(p => p.zone === z)).map(z => btn(z, `${ZONE_LABEL[z]} · ${PEOPLE.filter(p=>p.zone===z).length}`)).join("");
 }
 
 /* ---------- Satellite map ---------- */
@@ -1305,6 +1318,27 @@ $("#b-copycoords").onclick = e => { const ta = $("#coords");
 
 function renderAll(){ renderZones(); renderSchematic(); renderList(); renderUnplaced(); refreshMarkers(); }
 renderStats(); initMap(); renderAll();
+
+/* ---------- ติดตั้งเป็นแอป + อัปเดตอัตโนมัติ (ทำงานเมื่อเปิดผ่าน GitHub Pages) ---------- */
+(function pwa(){
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  let deferred = null;
+  addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; $("#b-install").hidden = false; });
+  $("#b-install").onclick = async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $("#b-install").hidden = true; };
+  addEventListener("appinstalled", () => { $("#b-install").hidden = true; });
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone;
+  if (ios && location.hostname.endsWith("github.io")) $("#ios-hint").hidden = false;
+  if ("serviceWorker" in navigator && location.protocol === "https:" && !location.hostname.endsWith("claude.ai")) {
+    try {
+      navigator.serviceWorker.register("sw.js").then(reg => {
+        setInterval(() => reg.update().catch(() => {}), 30 * 60 * 1000);
+        document.addEventListener("visibilitychange", () => { if (!document.hidden) reg.update().catch(() => {}); });
+      }).catch(() => {});
+      let reloaded = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => { if (!reloaded && navigator.serviceWorker.controller) { reloaded = true; location.reload(); } });
+    } catch (e) {}
+  }
+})();
 </script>
 
 </body>
