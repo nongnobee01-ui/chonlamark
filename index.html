@@ -686,7 +686,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --bg:#eef2f3; --surface:#ffffff; --fg:#13242b; --muted:#5a6e76; --line:#d2dcdf;
   --river:#2a7593; --river-2:#4f9cb7; --bridge:#7d8b90; --gold:#a87b14; --gold-soft:#f3e7c6; --route:#f2c230;
   --z1:#2a6fb0; --z2:#b0602a; --z3:#2f8a5c; --z4:#8a4bb0; --z5:#b03a5b; --z6:#8a6d12; --z7:#1f7a8c;
-  --t1:#1f63b5; --t1b:#e3eefb; --t1t:#0c3c74; --t2:#14866b; --t2b:#dff3ec; --t2t:#08503f; --t3:#b07a12; --t3b:#f8ecd2; --t3t:#5e3d05;
+  --t1:#1f63b5; --t1b:#e3eefb; --t1t:#0c3c74; --t2:#14866b; --t2b:#dff3ec; --t2t:#08503f; --t3:#b07a12; --t3b:#f8ecd2; --t3t:#5e3d05; --t4:#6a45b0; --t4b:#ece5fa; --t4t:#3a2170; --src1:#2a6fb0; --src2:#c99a1e;
   --display:"Chakra Petch","Sarabun",system-ui,sans-serif;
   --body:"Sarabun",system-ui,sans-serif;
 }
@@ -694,12 +694,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --bg:#0b161a; --surface:#13232a; --fg:#e2edf0; --muted:#91a7af; --line:#24373e;
   --river:#2c86a8; --river-2:#5fb2cd; --bridge:#8fa0a6; --gold:#e2b64e; --gold-soft:#3a3019;
   --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; --z7:#5cc3d6;
-  --t1:#7cb3f0; --t1b:#16304d; --t1t:#d6e7fb; --t2:#5fd0ad; --t2b:#123a31; --t2t:#d2f3e8; --t3:#e8b848; --t3b:#3d2f12; --t3t:#f7e6c0; color-scheme:dark}}
+  --t1:#7cb3f0; --t1b:#16304d; --t1t:#d6e7fb; --t2:#5fd0ad; --t2b:#123a31; --t2t:#d2f3e8; --t3:#e8b848; --t3b:#3d2f12; --t3t:#f7e6c0; --t4:#b49af0; --t4b:#2a2145; --t4t:#e6dcfb; --src1:#6aa8e6; --src2:#e8b848; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0b161a; --surface:#13232a; --fg:#e2edf0; --muted:#91a7af; --line:#24373e;
   --river:#2c86a8; --river-2:#5fb2cd; --bridge:#8fa0a6; --gold:#e2b64e; --gold-soft:#3a3019;
   --z1:#6aa8e6; --z2:#e4975f; --z3:#5fc493; --z4:#bf8ae4; --z5:#ec7c9a; --z6:#e2b64e; --z7:#5cc3d6;
-  --t1:#7cb3f0; --t1b:#16304d; --t1t:#d6e7fb; --t2:#5fd0ad; --t2b:#123a31; --t2t:#d2f3e8; --t3:#e8b848; --t3b:#3d2f12; --t3t:#f7e6c0; color-scheme:dark}
+  --t1:#7cb3f0; --t1b:#16304d; --t1t:#d6e7fb; --t2:#5fd0ad; --t2b:#123a31; --t2t:#d2f3e8; --t3:#e8b848; --t3b:#3d2f12; --t3t:#f7e6c0; --t4:#b49af0; --t4b:#2a2145; --t4t:#e6dcfb; --src1:#6aa8e6; --src2:#e8b848; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
 .wrap{max-width:980px;margin:0 auto;padding-block:18px 48px;
@@ -716,13 +716,43 @@ h1{font-family:var(--display);font-size:clamp(22px,4.6vw,32px);line-height:1.15;
 .stat b{font:700 22px var(--display);font-variant-numeric:tabular-nums;display:block;line-height:1.1}
 .stat span{font-size:12px;color:var(--muted)}
 
-.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 12px}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0 12px}
 .tab{--tc:var(--t1);--tb:var(--t1b);--tt:var(--t1t);font:600 15px/1.25 var(--display);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;color:var(--muted);padding:12px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;transition:background .15s,border-color .15s}
 .tab svg{width:26px;height:26px;stroke:var(--tc);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tab:hover{border-color:var(--tc)}
 .tab[aria-selected="true"]{border-color:var(--tc);background:var(--tb);color:var(--tt);box-shadow:inset 0 -4px 0 var(--tc)}
 #tab-map{--tc:var(--t2);--tb:var(--t2b);--tt:var(--t2t)}
 #tab-list{--tc:var(--t3);--tb:var(--t3b);--tt:var(--t3t)}
+#tab-zone{--tc:var(--t4);--tb:var(--t4b);--tt:var(--t4t)}
+@media (max-width:520px){.tabs{gap:6px}.tab{font-size:13px;padding:10px 3px}.tab svg{width:22px;height:22px}}
+/* Zone chart */
+.zsum{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:14px}
+.zs{background:var(--zc);color:#fff;border-radius:12px;padding:10px 12px;display:grid;gap:2px;cursor:pointer;border:0;text-align:left;font:inherit}
+.zs b{font:700 17px var(--display)}
+.zs span{font-size:13px;opacity:.92}
+.zs .n{font:700 22px var(--display);font-variant-numeric:tabular-nums}
+.zsec{margin-bottom:18px}
+.zhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:3px solid var(--zc);padding-bottom:6px;margin-bottom:10px}
+.zhead h3{font:700 19px var(--display);margin:0;color:var(--zc)}
+.zhead .rng{font:600 13px var(--display);background:var(--zc);color:#fff;border-radius:99px;padding:1px 10px}
+.zhead .cnt{margin-left:auto;font-size:13px;color:var(--muted)}
+.zgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.zcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:10px;min-width:0}
+.zct{display:flex;align-items:center;gap:10px;text-align:left;background:none;border:0;padding:0;color:inherit;font:inherit;cursor:pointer}
+.zct .num{flex:none;min-width:38px;height:38px;border-radius:19px;background:var(--zc);color:#fff;font:700 15px/38px var(--display);text-align:center;padding:0 8px}
+.zct .num.nonum{background:var(--bg);color:var(--zc);border:2px solid var(--zc);line-height:34px}
+.zct b{font:600 16px/1.3 var(--display);display:block}
+.zct small{color:var(--muted);font-size:12px}
+.ppl{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px}
+.pp{display:grid;justify-items:center;gap:4px;background:none;border:0;padding:2px;color:inherit;font:inherit;cursor:pointer;text-align:center;border-radius:10px}
+.pp:hover{background:var(--bg)}
+.pp img{width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid var(--src1);background:var(--line)}
+.pp.s2 img{border-color:var(--src2)}
+.pp span{font-size:12px;line-height:1.3;overflow-wrap:anywhere}
+.zempty{font-size:12px;color:var(--muted);margin:8px 0 0}
+.zlegend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin:4px 0 14px}
+.zlegend i{display:inline-block;width:14px;height:14px;border-radius:50%;border:3px solid var(--src1);vertical-align:-2px;margin-right:6px}
+.zlegend i.s2{border-color:var(--src2)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 .zones{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
@@ -845,6 +875,7 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
     <button class="tab" role="tab" id="tab-sat" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.7 10.7l3-3 3.6 3.6-3 3z"/><path d="M13.7 13.7l3-3 3.6 3.6-3 3z"/><path d="M9.5 12.2l2.3-2.3 2.3 2.3-2.3 2.3z"/><path d="M5 19a3 3 0 0 0 3 0"/><path d="M4 21a6 6 0 0 0 6-1"/></svg><span>แผนที่ดาวเทียม</span></button>
     <button class="tab" role="tab" id="tab-map" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M12 19h4.5a3.5 3.5 0 0 0 0-7h-8a3.5 3.5 0 0 1 0-7H12"/></svg><span>ผังริมน้ำ</span></button>
     <button class="tab" role="tab" id="tab-list" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/><path d="M21 21v-2a4 4 0 0 0-3-3.9"/></svg><span>รายชื่อทั้งหมด</span></button>
+    <button class="tab" role="tab" id="tab-zone" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>ผังโซน</span></button>
   </div>
 
   <div class="zones" id="zones"></div>
@@ -871,6 +902,12 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
     <div class="banks"><span>ฝั่งธนบุรี</span><span class="n">เหนือ ↑</span><span>ฝั่งพระนคร</span></div>
     <div class="map" id="map"></div>
     <p class="legend">เรียงจุดจากเหนือลงใต้ตามตำแหน่งริมแม่น้ำ</p>
+  </section>
+
+  <section id="view-zone" hidden>
+    <div class="zsum" id="zsum"></div>
+    <div class="zlegend"><span><i></i>อินฟลูเอนเซอร์ ศอ.จอส.พระราชทาน ภาค ๑</span><span><i class="s2"></i>อินฟลูเอนเซอร์ ศปก.พล.</span></div>
+    <div id="zchart"></div>
   </section>
 
   <section id="view-list" hidden>
@@ -1222,6 +1259,40 @@ function renderSchematic(){
   $("#map").innerHTML = `<span class="rlabel">แม่น้ำเจ้าพระยา</span>` + html;
 }
 
+/* ---------- Zone chart (ตามแผนที่ทางการ) ---------- */
+const ZONE_SECTIONS = [
+  {z:1, title:"โซน 1", range:"พื้นที่ 1–6", pts:["L1","L2","L3","L5","L6"], empty:"จุด 3 ยังไม่มีอินฟลูเอนเซอร์"},
+  {z:2, title:"โซน 2", range:"พื้นที่ 7–8", pts:["L8","L11"]},
+  {z:3, title:"โซน 3", range:"พื้นที่ 9–12", pts:["L4","L7"], empty:"จุด 9 และ 10 ยังไม่มีอินฟลูเอนเซอร์"},
+  {z:4, title:"โซน 4", range:"พื้นที่ 13–16", pts:["L9","L10"], empty:"จุด 16 ยังไม่มีอินฟลูเอนเซอร์"},
+  {z:5, title:"วัดอรุณราชวราราม", range:"จุดสิ้นสุดขบวน", pts:["L12"]},
+  {z:6, title:"พื้นที่ ศปก.พล.", range:"รับเสด็จ", pts:["L13","L14"]}
+];
+const shortName = n => n.replace(/^(นางสาว|นาย|นาง|น\.ส\.\s?|น\.ส\.)\s*/, "");
+function zcardHtml(P){
+  const ps = at(P.id);
+  return `<div class="zcard" style="${zc(P.zone)}">
+    <button class="zct" data-pt="${P.id}"><span class="num${P.num ? "" : " nonum"}">${P.num || "•"}</span>
+      <span><b>${esc(P.name)}</b><small>${ps.length} คน · ${P.bank === "w" ? "ฝั่งธนบุรี" : "ฝั่งพระนคร"}</small></span></button>
+    <div class="ppl">${ps.map(x => `<button class="pp${x.zone === 6 ? " s2" : ""}" data-person="${x.id}"><img src="${img(x)}" alt="" loading="lazy"><span>${esc(shortName(x.name))}</span></button>`).join("")}</div>
+  </div>`;
+}
+function renderZoneChart(){
+  const count = sec => sec.pts.reduce((n, id) => n + at(id).length, 0);
+  $("#zsum").innerHTML = ZONE_SECTIONS.map(sec => `<button class="zs" data-zone="${sec.z}" style="${zc(sec.z)}">
+      <b>${esc(sec.title)}</b><span>${esc(sec.range)}</span><span class="n">${count(sec)} คน</span></button>`).join("");
+  const secs = ZONE_SECTIONS.filter(sec => !zoneFilter || sec.z === zoneFilter);
+  const un = PEOPLE.filter(p => !p.pt && inZone(p));
+  $("#zchart").innerHTML = secs.map(sec => `<section class="zsec" style="${zc(sec.z)}">
+      <div class="zhead"><h3>${esc(sec.title)}</h3><span class="rng">${esc(sec.range)}</span><span class="cnt">${sec.pts.length} จุด · ${count(sec)} คน</span></div>
+      <div class="zgrid">${sec.pts.map(id => zcardHtml(pt(id))).join("")}</div>
+      ${sec.empty ? `<p class="zempty">${esc(sec.empty)}</p>` : ""}
+    </section>`).join("") + (un.length ? `<section class="zsec" style="--zc:var(--muted)">
+      <div class="zhead"><h3>ยังไม่ระบุจุด</h3><span class="cnt">${un.length} คน</span></div>
+      <div class="zcard"><div class="ppl">${un.map(x => `<button class="pp${x.zone === 6 ? " s2" : ""}" data-person="${x.id}"><img src="${img(x)}" alt="" loading="lazy"><span>${esc(shortName(x.name))}</span></button>`).join("")}</div></div>
+    </section>` : "");
+}
+
 /* ---------- List ---------- */
 function cardHtml(p){
   const P = pt(p.pt);
@@ -1308,7 +1379,7 @@ document.addEventListener("click", e => {
 });
 sheet.addEventListener("click", e => { if (e.target === sheet) sheet.close(); });
 
-const TABS = {sat:"#view-sat", map:"#view-map", list:"#view-list"};
+const TABS = {sat:"#view-sat", map:"#view-map", list:"#view-list", zone:"#view-zone"};
 function setTab(w){
   Object.entries(TABS).forEach(([k, sel]) => { $("#tab-" + k).setAttribute("aria-selected", k === w); $(sel).hidden = k !== w; });
   if (w === "sat" && map) setTimeout(() => map.invalidateSize(), 0);
@@ -1325,7 +1396,7 @@ $("#b-edit").onclick = e => { editing = !editing; e.currentTarget.setAttribute("
 $("#b-copycoords").onclick = e => { const ta = $("#coords");
   (navigator.clipboard?.writeText(ta.value) || Promise.reject()).then(() => e.target.textContent = "คัดลอกแล้ว").catch(() => ta.select()); };
 
-function renderAll(){ renderZones(); renderSchematic(); renderList(); renderUnplaced(); refreshMarkers(); }
+function renderAll(){ renderZones(); renderSchematic(); renderList(); renderUnplaced(); renderZoneChart(); refreshMarkers(); }
 renderStats(); initMap(); renderAll();
 
 /* ---------- ติดตั้งเป็นแอป + อัปเดตอัตโนมัติ (ทำงานเมื่อเปิดผ่าน GitHub Pages) ---------- */
