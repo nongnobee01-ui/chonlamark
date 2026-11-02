@@ -891,25 +891,26 @@ dialog::backdrop{background:rgb(5 15 20 / .55)}
 /* ===================== ข้อมูล =====================
    แหล่งข้อมูล
    - กลุ่มโซน 1–5: เอกสาร "ข้อมูล Influencer ศอ.จอส.พระราชทาน ภาค ๑" (PDF)
-   - กลุ่ม ทภ.1 (zone 6): ตาราง "ข้อมูล Influencer หน่วยทหาร / พลเรือน" และ "นักเรียน/นักศึกษา เข้าร่วมรับเสด็จฯ"
+   - ศปก.พล. (zone 6): ตาราง "ข้อมูล Influencer หน่วยทหาร / พลเรือน" และ "นักเรียน/นักศึกษา เข้าร่วมรับเสด็จฯ"
    POINTS: lat/lng ตรวจกับภาพดาวเทียม Esri แล้ว (ปรับได้ด้วยปุ่ม "ปรับตำแหน่งจุด")
    bank "w" = ฝั่งธนบุรี, "e" = ฝั่งพระนคร · bridge/pair ใช้กับผังริมน้ำ */
 /* เพิ่มโซนใหม่: ใส่เลขและชื่อที่นี่ แล้วใส่ zone เลขนั้นให้คน/จุด (สี --z7 เตรียมไว้ให้ ถปภ.) */
-const ZONE_LABEL = {1:"โซน 1",2:"โซน 2",3:"โซน 3",4:"โซน 4",5:"โซน 5",6:"กลุ่ม ทภ.1",7:"ถปภ."};
+const ZONE_LABEL = {1:"โซน 1",2:"โซน 2",3:"โซน 3",4:"โซน 4",5:"วัดอรุณฯ",6:"ศปก.พล.",7:"ถปภ."};
 const POINTS = [
-  {id:"L1",  zone:1, bank:"e", name:"วัดราชาธิวาส", lat:13.7763, lng:100.5024},
-  {id:"L2",  zone:1, bank:"e", name:"วัดเทวราชกุญชร", lat:13.7722, lng:100.5008},
-  {id:"L3",  zone:1, bank:"e", name:"ใต้สะพานพระราม 8 (ศูนย์การเรียนรู้ ธปท.)", lat:13.7695, lng:100.499, bridge:"สะพานพระราม 8"},
-  {id:"L4",  zone:3, bank:"w", name:"ใต้สะพานพระราม 8 ฝั่งธนบุรี", lat:13.7688, lng:100.4952, pair:true},
-  {id:"L5",  zone:1, bank:"e", name:"สวนสันติชัยปราการ", lat:13.7641, lng:100.4955},
-  {id:"L6",  zone:1, bank:"e", name:"พุทธสมาคม", lat:13.7626, lng:100.493},
-  {id:"L7",  zone:3, bank:"w", name:"ใต้สะพานสมเด็จพระปิ่นเกล้า", lat:13.7625, lng:100.49, bridge:"สะพานสมเด็จพระปิ่นเกล้า"},
-  {id:"L8",  zone:2, bank:"e", name:"ม.ธรรมศาสตร์ ท่าพระจันทร์", lat:13.757, lng:100.49},
-  {id:"L9",  zone:4, bank:"w", name:"สวนสุขภาพ รพ.ศิริราช / อุทยานรสถานพิมุข", lat:13.7598, lng:100.4877, pair:true},
-  {id:"L10", zone:4, bank:"w", name:"วัดระฆังฯ", lat:13.7526, lng:100.4866},
+  {id:"L1",  num:"1", zone:1, bank:"e", name:"วัดราชาธิวาส", lat:13.7763, lng:100.5024},
+  {id:"L2",  num:"2", zone:1, bank:"e", name:"วัดเทวราชกุญชร", lat:13.7722, lng:100.5008},
+  {id:"L3",  num:"4", zone:1, bank:"e", name:"ศูนย์การเรียนรู้ ธปท. (ใต้สะพานพระราม 8)", lat:13.7695, lng:100.499, bridge:"สะพานพระราม 8"},
+  {id:"L4",  num:"11", zone:3, bank:"w", name:"ใต้สะพานพระราม 8 ฝั่งธนบุรี", lat:13.7688, lng:100.4952, pair:true},
+  {id:"L5",  num:"5", zone:1, bank:"e", name:"สวนสันติชัยปราการ", lat:13.7641, lng:100.4955},
+  {id:"L6",  num:"6", zone:1, bank:"e", name:"พุทธสมาคมแห่งประเทศไทย", lat:13.7626, lng:100.493},
+  {id:"L7",  num:"12", zone:3, bank:"w", name:"ใต้สะพานสมเด็จพระปิ่นเกล้า", lat:13.7625, lng:100.49, bridge:"สะพานสมเด็จพระปิ่นเกล้า"},
+  {id:"L8",  num:"7", zone:2, bank:"e", name:"ม.ธรรมศาสตร์ ท่าพระจันทร์", lat:13.757, lng:100.49},
+  {id:"L9",  num:"13–14", zone:4, bank:"w", name:"สวนสุขภาพ รพ.ศิริราช / อุทยานรสถานพิมุข", lat:13.7598, lng:100.4877, pair:true},
+  {id:"L14", zone:6, bank:"w", name:"สวนเฉลิมพระเกียรติ 72 พรรษา", lat:13.7580, lng:100.4866, note:"ตำแหน่งโดยประมาณตามแผนที่ทางการ (ฝั่งธนบุรี ใกล้จุด 13–14)"},
+  {id:"L10", num:"15", zone:4, bank:"w", name:"วัดระฆังโฆสิตาราม", lat:13.7526, lng:100.4866},
   {id:"L13", zone:6, bank:"e", name:"ท่าช้าง (พื้นที่รับเสด็จ)", lat:13.7524, lng:100.4889, pair:true},
-  {id:"L11", zone:2, bank:"e", name:"สวนนคราภิรมย์", lat:13.7498, lng:100.489},
-  {id:"L12", zone:5, bank:"w", name:"วัดอรุณฯ", lat:13.7434, lng:100.49}
+  {id:"L11", num:"8", zone:2, bank:"e", name:"สวนนคราภิรมย์", lat:13.7498, lng:100.489},
+  {id:"L12", zone:5, bank:"w", name:"วัดอรุณราชวราราม", lat:13.7434, lng:100.49}
 ];
 
 /* เส้นแม่น้ำ (กลางลำน้ำ) เหนือ→ใต้ และเส้นทางขบวน = ช่วงตั้งแต่ ROUTE_START */
@@ -943,7 +944,7 @@ const PEOPLE = [
    links:["https://www.tiktok.com/@kiti_kunn","https://www.tiktok.com/@siri.nanthakarn","https://www.instagram.com/kitikun.ig"]},
   {zone:1,type:"civ",name:"นาง ลักขณา ทองมะลิ",pages:["ลักขณา ทองมะลิ"],fol:3200,pt:"L2",photo:"p06",
    bio:"ดับเพลิง",links:["https://www.facebook.com/lakkhna.thxng.mali"]},
-  {zone:1,type:"civ",name:"นางสาว พรณิชา เผ่าพันธ์",pages:["พรณิชา"],fol:2100,pt:"L3",photo:"p07",
+  {zone:1,type:"civ",name:"นางสาว พรณิชา เผ่าพันธุ์",pages:["พรณิชา"],fol:2100,pt:"L3",photo:"p07",
    bio:"ทำคอนเทนต์เทิดพระเกียรติราชวงศ์ไทย สืบสานพระราชประวัติ น้อมรำลึกในพระมหากรุณาธิคุณ",links:["https://www.tiktok.com/@pornnicha_4265"]},
   {zone:1,type:"civ",name:"นางสาว ธันยรัศมิ์ งามณรงค์ชัย",pages:["หนิง","Thanyarat Ngarmnarongchai"],fol:1400,pt:"L6",photo:"p08",
    bio:"ชอบงานจิตอาสา",links:["https://www.tiktok.com/@ningthanyarat1","https://www.facebook.com/share/19dbkqasYb/"]},
@@ -951,7 +952,7 @@ const PEOPLE = [
    bio:"สื่อจิตอาสาแพทย์วิถีธรรม (หมอเขียว)",links:["https://www.facebook.com/phr.npha.bu.rn.siri"]},
   {zone:1,type:"civ",name:"นาย พิริยะ ทองจิตติ",pages:["โครงการส่งเสริมและพัฒนาศักยภาพบุคลากรแห่งประเทศไทย"],fol:177,pt:"L2",photo:"p10",
    bio:"มีทักษะ script writer สื่อสารภาษาอังกฤษได้ดี ถ่ายภาพนิ่งและภาพเคลื่อนไหว ชื่นชอบและมีความรู้ด้านประวัติศาสตร์",links:["https://www.facebook.com/share/1YcBLK8m5o/"]},
-  {zone:1,type:"civ",name:"นาย ธนวัช เผ่าพันธ์",pages:["@pop_around"],fol:7,pt:"L3",photo:"p11",
+  {zone:1,type:"civ",name:"นาย ธนวัช เผ่าพันธุ์",pages:["@pop_around"],fol:7,pt:"L3",photo:"p11",
    bio:"ชอบเรียนรู้ประสบการณ์ใหม่ๆ",links:["https://www.tiktok.com/@pop_around"]},
   // ---------- โซน 2 ----------
   {zone:2,type:"mil",name:"ร.อ.หญิง พุทธชาด มาตร์มงคล",unit:"โรงเรียนเสนารักษ์ กรมแพทย์ทหารบก",pages:["โครงการส่งเสริมและพัฒนาศักยภาพบุคลากรแห่งประเทศไทย"],fol:176,pt:"L8",photo:"p12",
@@ -1080,7 +1081,7 @@ const PEOPLE = [
    bio:"ช่องสาระบันเทิง ไลฟ์สไตล์ ประเด็นสังคม และงานจิตอาสาช่วยเหลือประชาชน",
    links:["https://www.instagram.com/tack_pharunyoo/","https://www.facebook.com/aloha.tack","https://www.tiktok.com/@tack_pharunyoo","https://www.youtube.com/@tack2688"],
    coord:C_SET,pickup:"เข้าพื้นที่พร้อมทีมงาน"},
-  {zone:6,type:"civ",name:"ดร.สุรัตน์ จงดา",pages:["ไก่แก้ว การละคร (The Land of Arts)"],fol:28000,pt:null,photo:"c09",
+  {zone:6,type:"civ",name:"ดร.สุรัตน์ จงดา",pages:["ไก่แก้ว การละคร (The Land of Arts)"],fol:28000,pt:"L14",photo:"c09",
    bio:"ผู้เชี่ยวชาญด้านศิลปวัฒนธรรมไทย นาฏศิลป์ ประวัติศาสตร์ และการอนุรักษ์มรดกทางวัฒนธรรม ถ่ายทอดความรู้เรื่องนาฏศิลป์ การแสดงโขน และขนบธรรมเนียมประเพณี",
    links:["https://www.facebook.com/landofartsbysuratjongda"],
    area:"จุดที่ 6 สวนเฉลิมพระเกียรติ 72 พรรษา",guide:T("น.อ.กวีวัฒน์ เก่งการ","09 2274 2849")},
@@ -1112,6 +1113,7 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;
 const fmt = n => n == null ? "ไม่ระบุ" : n.toLocaleString("th-TH");
 const short = n => n == null ? "–" : n >= 1e6 ? (n/1e6).toFixed(n%1e6?1:0)+"M" : n >= 1e3 ? (n/1e3).toFixed(n>=1e4?0:1).replace(/\.0$/,"")+"K" : String(n);
 const pt = id => POINTS.find(x => x.id === id);
+const ptName = P => (P.num ? `จุด ${P.num} · ` : "") + P.name;
 const at = id => PEOPLE.filter(p => p.pt === id).sort((a,b) => (b.fol ?? -1) - (a.fol ?? -1));
 const img = p => `photos/${p.photo}.jpg`;
 const zc = z => `--zc:var(--z${z})`;
@@ -1170,7 +1172,7 @@ function initMap(){
 
   POINTS.forEach(P => {
     const m = L.marker([P.lat, P.lng], {icon:L.divIcon({className:"", html:markerHtml(P), iconSize:[48,48], iconAnchor:[24,24]}), draggable:false, riseOnHover:true}).addTo(map);
-    m.bindTooltip(P.name, {permanent:true, direction:P.bank === "w" ? "left" : "right", offset:P.bank === "w" ? [-26,0] : [26,0], className:"lbl"});
+    m.bindTooltip(ptName(P), {permanent:true, direction:P.bank === "w" ? "left" : "right", offset:P.bank === "w" ? [-26,0] : [26,0], className:"lbl"});
     m.on("click", () => { if (!editing) showPoint(P.id); });
     m.on("dragend", () => { const ll = m.getLatLng(); P.lat = +ll.lat.toFixed(5); P.lng = +ll.lng.toFixed(5); writeCoords(); });
     markers[P.id] = m;
@@ -1194,7 +1196,7 @@ function showFallback(){
   riverFallback.bringToBack();
 }
 function refreshMarkers(){ if (!map) return; POINTS.forEach(P => markers[P.id].setIcon(L.divIcon({className:"", html:markerHtml(P), iconSize:[48,48], iconAnchor:[24,24]}))); }
-function writeCoords(){ $("#coords").value = POINTS.map(p => `${p.id}  lat:${p.lat}, lng:${p.lng}  // ${p.name}`).join("\n"); }
+function writeCoords(){ $("#coords").value = POINTS.map(p => `${p.id}  lat:${p.lat}, lng:${p.lng}  // ${ptName(p)}`).join("\n"); }
 
 function renderUnplaced(){
   const list = PEOPLE.filter(p => !p.pt && inZone(p));
@@ -1212,7 +1214,7 @@ function renderSchematic(){
     html += `<div class="cell ${p.bank}" style="grid-row:${row};${zc(p.zone)}">
       <button class="pt${ptMatches(p) ? "" : " dim"}" data-pt="${p.id}">
         <span class="pt-zone">${ZONE_LABEL[p.zone]}</span>
-        <span class="pt-name">${esc(p.name)}</span>
+        <span class="pt-name">${esc(ptName(p))}</span>
         <span class="stack"><span class="faces">${shown.map(x => `<img src="${img(x)}" alt="" loading="lazy">`).join("")}</span>
         <span class="cnt">${ps.length} คน</span></span>
       </button></div>`;
@@ -1227,13 +1229,13 @@ function cardHtml(p){
     <img src="${img(p)}" alt="" loading="lazy">
     <div><b>${esc(p.name)}</b>
     <small>${esc(p.pages[0] || "ไม่ระบุเพจ")} · ${short(p.fol)}</small>
-    <small><span class="tag">${TYPE[p.type]}</span>${P ? esc(P.name) : esc(p.area || "ยังไม่ระบุจุด")}</small>
+    <small><span class="tag">${TYPE[p.type]}</span>${P ? esc(ptName(P)) : esc(p.area || "ยังไม่ระบุจุด")}</small>
     ${p.coord ? `<small>ผู้ประสาน: ${esc(p.coord.name)}</small>` : ""}</div></button>`;
 }
 function renderList(){
   const q = $("#q").value.trim().toLowerCase(), t = $("#ftype").value, s = $("#fsort").value;
   let list = PEOPLE.filter(p => inZone(p) && (!t || p.type === t) &&
-    (!q || [p.name, p.unit, ...p.pages, p.pt ? pt(p.pt).name : "", p.area, p.coord?.name, p.guide?.name].join(" ").toLowerCase().includes(q)));
+    (!q || [p.name, p.unit, ...p.pages, p.pt ? ptName(pt(p.pt)) : "", p.area, p.coord?.name, p.guide?.name].join(" ").toLowerCase().includes(q)));
   if (s === "fol") list = [...list].sort((a,b) => (b.fol ?? -1) - (a.fol ?? -1));
   $("#count").textContent = `แสดง ${list.length} จาก ${PEOPLE.length} คน`;
   $("#grid").innerHTML = list.length ? list.map(cardHtml).join("") : '<p class="muted">ไม่พบรายชื่อที่ตรงกับการค้นหา</p>';
@@ -1247,7 +1249,7 @@ function showPoint(id){
   const P = pt(id), ps = at(id), gs = GROUPS.filter(g => g.pt === id);
   open(`<div class="head"><div>
       <div class="pt-zone">${ZONE_LABEL[P.zone]} · ${P.bank === "w" ? "ฝั่งธนบุรี" : "ฝั่งพระนคร"}</div>
-      <h2>${esc(P.name)}</h2></div>
+      <h2>${esc(ptName(P))}</h2>${P.note ? `<div class="muted" style="font-size:13px">${esc(P.note)}</div>` : ""}</div>
       <button class="close" data-close>ปิด</button></div>
     <p class="sec">อินฟลูเอนเซอร์ประจำจุด ${ps.length} คน</p>
     <div class="grid">${ps.map(cardHtml).join("")}</div>
@@ -1275,13 +1277,13 @@ function showPerson(id){
       ${x.guide ? `<dt>ผู้ประสานงานพาเข้าพื้นที่</dt><dd>${telHtml(x.guide)}</dd>` : ""}
     </dl></div>`
     : `<p class="sec">การประสานงาน</p><p class="muted" style="margin:0">ยังไม่มีข้อมูลผู้ประสานงานในเอกสารต้นทาง</p>`;
-  open(`${P ? `<button class="back" data-pt="${P.id}">‹ ${ZONE_LABEL[P.zone]} · ${esc(P.name)}</button>` : ""}
+  open(`${P ? `<button class="back" data-pt="${P.id}">‹ ${ZONE_LABEL[P.zone]} · ${esc(ptName(P))}</button>` : ""}
     <div class="head"><img class="big" src="${img(x)}" alt="">
       <div><span class="tag">${TYPE[x.type]}</span><span class="tag">${ZONE_LABEL[x.zone]}</span><h2>${esc(x.name)}</h2>${x.unit ? `<div class="muted">${esc(x.unit)}</div>` : ""}</div>
       <button class="close" data-close>ปิด</button></div>
     <dl class="kv">
       <dt>ผู้ติดตาม</dt><dd>${fmt(x.fol)}${x.folNote ? ` (${esc(x.folNote)})` : ""}</dd>
-      <dt>จุดปฏิบัติงาน</dt><dd>${P ? esc(P.name) : esc(x.area || "ยังไม่ระบุ")}</dd>
+      <dt>จุดปฏิบัติงาน</dt><dd>${P ? esc(ptName(P)) : esc(x.area || "ยังไม่ระบุ")}</dd>
       <dt>ชื่อเพจ</dt><dd>${x.pages.length ? x.pages.map(esc).join("<br>") : "ไม่ระบุ"}</dd>
     </dl>
     ${coordBlock}
