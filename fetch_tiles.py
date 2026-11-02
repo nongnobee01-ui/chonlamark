@@ -2,8 +2,8 @@ import math, os, urllib.request, time
 def t(lat, lon, z):
     n = 2 ** z
     return (int((lon + 180) / 360 * n), int((1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * n))
-LAT0, LAT1, LON0, LON1 = 13.7830, 13.7390, 100.4780, 100.5145
-for z in (16, 17):
+LAT0, LAT1, LON0, LON1 = 13.7930, 13.7310, 100.4640, 100.5300
+for z in (16,):
     x0, y0 = t(LAT0, LON0, z); x1, y1 = t(LAT1, LON1, z)
     for x in range(x0, x1 + 1):
         for y in range(y0, y1 + 1):
