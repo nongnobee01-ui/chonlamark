@@ -1,6 +1,6 @@
 /* Service worker: ข้อมูลหน้าแอปดึงจากเน็ตก่อนเสมอ (อัปเดตทันทีที่แก้ไฟล์บน GitHub)
    ถ้าเน็ตหลุด ใช้ของที่เก็บไว้ล่าสุด · ภาพดาวเทียมและรูปเก็บไว้ใช้ตอนสัญญาณอ่อน */
-const VERSION = "v11";
+const VERSION = "v12";
 const SHELL = "shell-" + VERSION, MEDIA = "media-v1";
 const CORE = ["./", "index.html", "manifest.webmanifest", "logo.png", "app-icon-192.png",
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"];
