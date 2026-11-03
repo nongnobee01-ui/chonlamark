@@ -782,6 +782,18 @@ h1{font-family:var(--display);font-size:clamp(22px,4.6vw,32px);line-height:1.15;
 .edit-panel textarea{width:100%;min-height:120px;font:12px ui-monospace,monospace;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);padding:8px}
 .unplaced{margin-top:16px}
 .unplaced h3{font:600 15px var(--display);margin:0 0 8px}
+.updlg{border:0;padding:0;border-radius:16px;width:min(440px,calc(100% - 32px));background:var(--surface);color:var(--fg);box-shadow:0 12px 40px rgb(0 0 0 / .35)}
+.updlg::backdrop{background:rgb(5 15 20 / .5)}
+.upd{padding:18px 18px 16px;display:grid;gap:12px}
+.uph{display:flex;gap:12px;align-items:center}
+.uph>span{font-size:26px}
+.uph b{display:block;font:700 19px var(--display)}
+.uph small{color:var(--muted);font-size:13px}
+.upd ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14.5px;line-height:1.45}
+.upb{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.upb button{font:600 14.5px var(--display);border-radius:10px;padding:8px 16px;cursor:pointer;border:1.5px solid var(--line);background:var(--surface);color:var(--fg)}
+.upb .upok{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+@media (prefers-reduced-motion:no-preference){.updlg[open]{animation:upin .22s ease-out}@keyframes upin{from{transform:translateY(16px) scale(.98);opacity:.4}}}
 .ubar{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;border-bottom:3px solid var(--zc);padding-bottom:6px;margin-bottom:10px}
 .ubar b{font:700 20px var(--display);color:var(--zc)}
 .ubar span{color:var(--muted);font-size:13.5px}
@@ -1312,7 +1324,7 @@ const PEOPLE = [
   {zone:6,type:"civ",name:"นาย ประกาศิต เครือบุตร",pages:["Toon Vegan"],fol:2700000,pt:"L13",photo:"c06",
    bio:"อินฟลูเอนเซอร์ด้านกีฬา เพาะกาย สุขภาพ และอาหารวีแกน (Plant-based) ทำคอนเทนต์ประเด็นสังคมและการปกป้องประเทศผ่านสื่อออนไลน์",
    links:["https://www.facebook.com/bestbodybyToon","https://www.youtube.com/results?search_query=Toon+Vegan"],
-   coord:C_SET,pickup:"สแตนด์บายที่ บก.ทภ.1",pickupTime:"11.00 น.",area:"ท่าช้าง",ret:"17.00",guide:C_JEERA},
+   coord:C_SET,car:"Mazda CX-3 6กฮ 5488",driver:"พ.ต.เศรษฐกิจ",pickup:"สแตนด์บายที่ บก.ทภ.1",pickupTime:"11.00 น.",area:"ท่าช้าง",ret:"17.00",guide:C_JEERA},
   {zone:6,type:"civ",name:"นาย ฝันเด่น จรรยาธนากร",pages:["ฝันเด่น จรรยาธนากร"],fol:14500,pt:null,photo:"c07",
    bio:"ทำคอนเทนต์และกิจกรรมหลักเกี่ยวกับงานจิตอาสา อาสากู้ภัย การช่วยเหลือผู้ประสบภัย และกิจกรรมเพื่อสังคม",
    links:["https://www.tiktok.com/@fundanalexjunyata","https://www.youtube.com/@alexmarine4393"],
@@ -1343,7 +1355,9 @@ const GROUPS = [
   {pt:"L13",ord:1,origin:"เกิดจากคณะบดีคณะสถาปัตฯ เป็น จอส.904 ขอความช่วยเหลือช่วงน้ำท่วม จึงติดต่อกันต่อเนื่อง",name:"สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง",count:81,coord:[T("ร.ท.นราธรรม ถ้ำสุวรรณ","06 3669 9197"),T("ดร.ทรงศิริ พันธุเสวี","08 6708 5555")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 2 คัน",
    pickup:"อาคารสำนักงานอธิการบดี",pickupTime:"12.30",pickupMap:"https://maps.app.goo.gl/HaswjdgfMwnuZJPc8",ret:"17.00",guide:C_JEERA},
   {pt:"L13",ord:3,name:"มหาวิทยาลัยธรรมศาสตร์",count:60,origin:"เกิดจากศิษย์เก่าที่เป็น จอส.904 ช่วย ปชส.",coord:[T("ร.ท.ภูเมธ ชาติยานนท์","08 3245 3552")],car:"รถโดยสารปรับอากาศ 40 ที่นั่ง 2 คัน",
-   pickup:"จุดจอดรถริมสระน้ำ อาคารสำนักงานอธิการบดี",pickupTime:"10.30",pickupMap:"https://maps.app.goo.gl/Usa36NNt97QCY2xR6",ret:"17.00",guide:C_JEERA}
+   pickup:"จุดจอดรถริมสระน้ำ อาคารสำนักงานอธิการบดี",pickupTime:"10.30",pickupMap:"https://maps.app.goo.gl/Usa36NNt97QCY2xR6",ret:"17.00",guide:C_JEERA},
+  {pt:"L13",ord:4,extra:true,name:"รร.เสนาธิการทหารบก",count:26,coord:[T("พ.ท.เพรียวพันธ์ อดุลยาศักดิ์","09 8483 0170")],car:"มินิบัส",driver:"มทบ.11",
+   pickup:"รร.เสนาธิการทหารบก",pickupTime:"14.00",pickupMap:"https://maps.app.goo.gl/FuMzv39MMGe7esnMA",park:"กองทัพภาคที่ 1",drop:"ท่าช้าง",ret:"17.00",guide:C_JEERA}
 ];
 /* ===================== จบส่วนข้อมูล ===================== */
 
@@ -1382,7 +1396,7 @@ function renderStats(){
     <div class="stat"><b>${placed}</b><span>ระบุจุดแล้ว</span></div>
     <div class="stat"><b>${POINTS.length}</b><span>จุดริมแม่น้ำ</span></div>
     <div class="stat"><b>${short(total)}</b><span>ผู้ติดตามรวม</span></div>
-    <div class="stat" data-pt="L13" style="cursor:pointer"><b>${STUDENT_TOTAL}</b><span>นักเรียน/นักศึกษา ›</span></div>`;
+    <div class="stat" data-pt="L13" style="cursor:pointer"><b>${STUDENT_TOTAL + GROUPS.filter(g => g.extra).reduce((s,g) => s + g.count, 0)}</b><span>นักเรียน/นักศึกษา ›</span></div>`;
 }
 function renderZones(){
   const btn = (z, label) => `<button class="zbtn" data-zone="${z}" aria-pressed="${zoneFilter===z}" style="${z?zc(z):""}">${z?'<span class="dot"></span>':""}${label}</button>`;
@@ -1539,15 +1553,18 @@ function showPoint(id){
       <button class="close" data-close>ปิด</button></div>
     <p class="sec">อินฟลูเอนเซอร์ประจำจุด ${ps.length} คน</p>
     <div class="grid">${ps.map(cardHtml).join("")}</div>
-    ${gs.length ? `<p class="sec">นักศึกษาเข้าร่วมรับเสด็จฯ</p><p class="gorg" style="font-size:14.5px"><span>เบื้องหลัง</span>งานขบวนพยุหยาตราฯ ครั้งนี้มีนักศึกษามาร่วม <b>${STUDENT_TOTAL} คน</b> จาก ${gs.length} มหาวิทยาลัย</p>
-      ${[...gs].sort((a,b) => (a.ord||9)-(b.ord||9)).map((g,gi) => `<div class="grp"><b>${gi+1}. ${esc(g.name)} จำนวน ${g.count} คน</b>
+    ${gs.length ? `<p class="sec">นักศึกษาเข้าร่วมรับเสด็จฯ</p><p class="gorg" style="font-size:14.5px"><span>เบื้องหลัง</span>งานขบวนพยุหยาตราฯ ครั้งนี้มีนักศึกษามาร่วม <b>${STUDENT_TOTAL} คน</b> จาก ${gs.filter(g => !g.extra).length} มหาวิทยาลัย</p>
+      ${[...gs].sort((a,b) => (a.ord||9)-(b.ord||9)).map((g,gi) => `${g.extra && !gs.slice(0,gi).some(q => q.extra) ? `<p class="sec">สถานศึกษาอื่น</p>` : ""}<div class="grp"><b>${gi+1}. ${esc(g.name)} จำนวน ${g.count} ${g.extra ? "ราย" : "คน"}</b>
         ${g.origin ? `<p class="gorg"><span>ที่มา</span>${esc(g.origin)}</p>` : ""}
         ${g.split ? `<div class="gsplit"><span style="flex-basis:100%;font:600 12px var(--display)">👥 ภาพรวมผู้เดินทาง</span>${g.split.map(([l,n]) => `<span><b>${n}</b> ${esc(l)}</span>`).join("")}</div>` : ""}
         ${g.fac ? `<p style="margin:0;font-size:12.5px;color:var(--muted)">หมายเหตุ: ยอดที่แจ้ง 181 คน / สรุปรายคณะ 182 คน</p><details class="gfac" open><summary>${esc(g.facTitle || "แยกตามคณะ / หน่วยงาน")}</summary><div style="font:600 12px var(--display);margin-top:6px">🏛 แยกตามคณะ / หน่วยงาน (เรียงตามจำนวนรวม)</div><table>${g.fac.map(([f,n,d],i) => `<tr><td>${i+1}.</td><td>${esc(f)}<small>${esc(d)}</small></td><td>${n}</td></tr>`).join("")}</table></details>` : ""}
         <dl class="kv">
           <dt>ผู้ประสานงานสถานศึกษา</dt><dd>${g.coord.map(telHtml).join("<br>")}</dd>
           <dt>ข้อมูลรถ</dt><dd>${esc(g.car)}</dd>
+          ${g.driver ? `<dt>ข้อมูลพลขับ</dt><dd>${esc(g.driver)}</dd>` : ""}
           <dt>จุดรับขึ้น</dt><dd>${esc(g.pickup)} (เวลารับ ${esc(g.pickupTime)})${mapLink(g.pickupMap)}</dd>
+          ${g.park ? `<dt>จุดพักรถ</dt><dd>${esc(g.park)}</dd>` : ""}
+          ${g.drop ? `<dt>จุดส่งลง</dt><dd>${esc(g.drop)}</dd>` : ""}
           <dt>เวลากลับ</dt><dd>${esc(g.ret)}</dd>
           <dt>ผู้พาเข้าพื้นที่</dt><dd>${telHtml(g.guide)}</dd>
         </dl></div>`).join("")}` : ""}`, P.zone);
@@ -1561,6 +1578,7 @@ function showPerson(id){
   const coordBlock = hasCoord ? `<p class="sec">การประสานงาน</p><div class="coord"><dl class="kv">
       ${x.coord ? `<dt>ผู้ประสานงาน Influencer</dt><dd>${telHtml(x.coord)}</dd>` : ""}
       ${x.car ? `<dt>ข้อมูลรถ</dt><dd>${esc(x.car)}</dd>` : ""}
+      ${x.driver ? `<dt>ข้อมูลพลขับ</dt><dd>${esc(x.driver)}</dd>` : ""}
       ${x.pickup ? `<dt>จุดรับขึ้น</dt><dd>${esc(x.pickup)}${x.pickupTime ? ` (เวลารับ ${esc(x.pickupTime)})` : ""}${mapLink(x.pickupMap)}</dd>` : ""}
       ${x.area ? `<dt>พื้นที่รับเสด็จ</dt><dd>${esc(x.area)}${x.ret ? ` (กลับ ${esc(x.ret)})` : ""}</dd>` : ""}
       ${x.guide ? `<dt>ผู้ประสานงานพาเข้าพื้นที่</dt><dd>${telHtml(x.guide)}</dd>` : ""}
@@ -1618,6 +1636,30 @@ $("#b-copycoords").onclick = e => { const ta = $("#coords");
 
 function renderAll(){ renderZones(); renderSchematic(); renderList(); renderUnplaced(); renderZoneChart(); refreshMarkers(); }
 renderStats(); initMap(); renderAll();
+
+/* ---------- ป๊อปอัปแจ้งอัปเดต (เด้งครั้งเดียวต่อการอัปเดต) ----------
+   อัปเดตครั้งใหม่: เพิ่มรายการบนสุดด้วย id ใหม่ */
+const UPDATES = [
+  {id:"2026-11-04a", date:"4 พ.ย. 2569", items:[
+    "เพิ่ม รร.เสนาธิการทหารบก 26 ราย ที่จุดท่าช้าง (รถมินิบัส · รับ 14.00 น. · พักรถที่ กองทัพภาคที่ 1 · กลับ 17.00)",
+    "นาย ประกาศิต เครือบุตร (Toon Vegan): เพิ่มข้อมูลรถ Mazda CX-3 6กฮ 5488 และพลขับ",
+    "เพิ่มช่อง “ข้อมูลพลขับ” “จุดพักรถ” “จุดส่งลง” ในหน้ารายละเอียด"]}
+];
+(function updatePopup(){
+  const u = UPDATES[0]; if (!u) return;
+  let seen = null; try { seen = localStorage.getItem("chonla-seen-update"); } catch (e) {}
+  if (seen === u.id) return;
+  const d = document.createElement("dialog"); d.className = "updlg";
+  d.innerHTML = `<div class="upd"><div class="uph"><span>🔔</span><div><b>มีอัปเดตใหม่</b><small>${esc(u.date)}</small></div></div>
+    <ul>${u.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>
+    <div class="upb"><button class="upgo" data-pt="L13">ดูจุดท่าช้าง</button><button class="upok">รับทราบ</button></div></div>`;
+  document.body.appendChild(d);
+  const done = () => { try { localStorage.setItem("chonla-seen-update", u.id); } catch (e) {} d.close(); d.remove(); };
+  d.querySelector(".upok").onclick = done;
+  d.querySelector(".upgo").addEventListener("click", () => setTimeout(done, 0));
+  d.addEventListener("cancel", done);
+  setTimeout(() => { try { d.showModal(); } catch (e) {} }, 600);
+})();
 
 /* ---------- ติดตั้งเป็นแอป + อัปเดตอัตโนมัติ (ทำงานเมื่อเปิดผ่าน GitHub Pages) ---------- */
 (function pwa(){
