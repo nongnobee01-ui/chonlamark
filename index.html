@@ -1190,6 +1190,8 @@ const C_SET   = T("พ.ต.เศรษฐกิจ ต้นสกุล","09 7
 
 const PEOPLE = [
   // ---------- โซน 1 ----------
+  {zone:1,type:"civ",pin:true,name:"ครูหนุ่ม ศนิโรจน์",pages:["ครูหนุ่ม ศนิโรจน์"],fol:null,pt:"L3",photo:"k01",
+   bio:"",links:["https://www.facebook.com/kruNoomSaniroj/"]},
   {zone:1,type:"mil",name:"ส.ต.ท. จักรกริช อิ่มรัง",unit:"สตช.",pages:["จักการิช","jakkanott"],fol:117900,pt:"L2",photo:"p01",
    bio:"ช่องหลักเป็นไลฟ์สไตล์ชีวิตตำรวจชั้นประทวน คลิปเตือนภัย และสัมภาษณ์ผู้ปกครองของตำรวจ เล่าเรื่องแบบสตอรี่บอร์ดให้เข้าใจง่าย อีกช่องถ่ายทอดเรื่องสถาบันพระมหากษัตริย์ผ่านวันสำคัญ การเข้ารับเสด็จ และสัมภาษณ์ความรู้สึกประชาชนที่มารับเสด็จ",
    links:["https://www.tiktok.com/@jakkrit_nott","https://www.tiktok.com/@jakkanott","https://www.instagram.com/jakkrit_not"]},
@@ -1379,7 +1381,7 @@ const fmt = n => n == null ? "ไม่ระบุ" : n.toLocaleString("th-TH")
 const short = n => n == null ? "–" : n >= 1e6 ? (n/1e6).toFixed(n%1e6?1:0)+"M" : n >= 1e3 ? (n/1e3).toFixed(n>=1e4?0:1).replace(/\.0$/,"")+"K" : String(n);
 const pt = id => POINTS.find(x => x.id === id);
 const ptName = P => (P.num ? `จุด ${P.num} · ` : "") + P.name;
-const at = id => PEOPLE.filter(p => p.pt === id).sort((a,b) => (b.fol ?? -1) - (a.fol ?? -1));
+const at = id => PEOPLE.filter(p => p.pt === id).sort((a,b) => (b.pin ? 1 : 0) - (a.pin ? 1 : 0) || (b.fol ?? -1) - (a.fol ?? -1));
 const img = p => `photos/${p.photo}.jpg`;
 const zc = z => `--zc:var(--z${z})`;
 let zoneFilter = 0;
@@ -1650,7 +1652,7 @@ renderStats(); initMap(); renderAll();
 /* ---------- ป๊อปอัปแจ้งอัปเดต (เด้งครั้งเดียวต่อการอัปเดต) ----------
    อัปเดตครั้งใหม่: เปลี่ยน id ด้านล่างเป็นค่าใหม่ ป๊อปอัปจะเด้งอีกครั้ง */
 const UPDATES = [
-  {id:"2026-11-04b", date:"4 พ.ย. 2569"}
+  {id:"2026-11-05a", date:"5 พ.ย. 2569"}
 ];
 (function updatePopup(){
   const u = UPDATES[0]; if (!u) return;
